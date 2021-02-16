@@ -26,12 +26,12 @@ public class HashTag {
 	private Long id;
 	
 	@Column(nullable=false,unique=true)
-	private String label;
+	private String label="";
 	
 	private final Timestamp firstUsed = new Timestamp(System.currentTimeMillis());
 	
 	private Timestamp lastUsed;	
 	
-	@ManyToMany
+	@ManyToMany(mappedBy="hashtags")
 	private List<Tweet> tweets;
 }

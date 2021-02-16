@@ -2,13 +2,16 @@ package com.Assessment.SocialMedia.entities;
 
 import java.sql.Timestamp;
 import java.util.List;
-
+import javax.persistence.JoinColumn;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -28,20 +31,24 @@ public class Tweet {
 	private Long id;
 	
 	@ManyToOne
-	@Column(nullable=false)
-	private User author;
+	private TweedleUser author;
 	
 	private final Timestamp posted = new Timestamp(System.currentTimeMillis());
 	
 	private String content;
 	
+	@OneToOne
 	private Tweet inReplyTo;
 	
+	@OneToOne
 	private Tweet repostOf;
 	
 	private boolean deleted;
 	
-	@ManyToMany
+	@ManyToMany//(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@JoinTable(name = "tweetHashJoin",
+			joinColumns = @JoinColumn(name = "tweet_id"),
+			inverseJoinColumns = @JoinColumn(name = "hashTag_id"))
 	private List<HashTag> hashtags;
 	
 	@Override
