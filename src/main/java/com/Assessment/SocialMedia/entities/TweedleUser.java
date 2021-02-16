@@ -21,13 +21,13 @@ import lombok.Setter;
 @Getter
 @Setter
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class User {
+public class TweedleUser {
 	@Id
 	@GeneratedValue
 	private Long id;
 	
 	@Column(nullable=false, unique=true)
-	private String userName;
+	private String userName="";
 	
 	private final Timestamp joined = new Timestamp(System.currentTimeMillis());
 	
@@ -48,8 +48,8 @@ public class User {
     	if(obj == null || obj.getClass() != this.getClass()) {
     		return false;
     	}
-    	User user = (User) obj;
-    	return user.getId() == this.getId();
+    	TweedleUser tweedleUser = (TweedleUser) obj;
+    	return tweedleUser.getId() == this.getId();
     }
 	
 	@Override
