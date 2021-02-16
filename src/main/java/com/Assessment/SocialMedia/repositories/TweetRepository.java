@@ -4,6 +4,7 @@ import org.springframework.stereotype.Repository;
 
 import com.Assessment.SocialMedia.entities.Tweet;
 
+@Repository
 public interface TweetRepository  extends JpaRepository<Tweet,Long>{
 
 }
