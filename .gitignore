@@ -5,7 +5,6 @@ target/
 !**/src/test/**/target/
 /src/main/resources/application.properties
 /src/main/resources/MINE.application.properties
-.gitignore
 
 ### STS ###
 .apt_generated
