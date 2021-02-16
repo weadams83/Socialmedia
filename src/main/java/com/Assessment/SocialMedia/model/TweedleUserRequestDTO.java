@@ -1,5 +1,5 @@
 package com.Assessment.SocialMedia.model;
 
-public class UserRequestDTO {
+public class TweedleUserRequestDTO {
 
 }
