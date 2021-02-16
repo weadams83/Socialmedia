@@ -1,11 +1,13 @@
 package com.Assessment.SocialMedia.entities;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
@@ -38,6 +40,9 @@ public class Tweet {
 	private Tweet repostOf;
 	
 	private boolean deleted;
+	
+	@ManyToMany
+	private List<HashTag> hashtags;
 	
 	@Override
 	public boolean equals(Object obj) {
