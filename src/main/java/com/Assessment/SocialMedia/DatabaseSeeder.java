@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import com.Assessment.SocialMedia.entities.HashTag;
 import com.Assessment.SocialMedia.entities.Tweet;
+import com.Assessment.SocialMedia.entities.UserCredentials;
 import com.Assessment.SocialMedia.entities.TweedleUser;
 import com.Assessment.SocialMedia.repositories.HashTagRepository;
 import com.Assessment.SocialMedia.repositories.TweetRepository;
@@ -30,7 +31,9 @@ public class DatabaseSeeder  implements CommandLineRunner{
 		TweedleUser arwen = new TweedleUser();
 		arwen.setUserName("Arwen");
 		//initialize user.profile
-		//initialize user.credentials
+		UserCredentials arwenPass = new UserCredentials();
+		arwenPass.setPassword("EveningStar");
+		arwen.setCredentials(arwenPass);
 		Tweet tweet = new Tweet();
 		tweet.setContent("OMG, look at gandalf's beard! #DadBod #WielderOfTheSecretFire");
 		tweet.setAuthor(arwen);
@@ -63,7 +66,9 @@ public class DatabaseSeeder  implements CommandLineRunner{
 		TweedleUser eowyn = new TweedleUser();
 		eowyn.setUserName("Eowyn");
 		//initialize user.profile
-		//initialize user.credentials
+		UserCredentials eowynPass = new UserCredentials();
+		eowynPass.setPassword("IamNoMan");
+		eowyn.setCredentials(eowynPass);
 		
 		Tweet tweet2 = new Tweet();
 		tweet2.setContent("You should see his instagram, Galadriel is a huge fan! Too bad he's all #YouShallNotPass");
@@ -92,7 +97,9 @@ public class DatabaseSeeder  implements CommandLineRunner{
 		TweedleUser gimli = new TweedleUser();
 		gimli.setUserName("Gimli");
 		//initialize user.profile
-		//initialize user.credentials
+		UserCredentials gimliPass = new UserCredentials();
+		gimliPass.setPassword("NaturalSprinter");
+		gimli.setCredentials(gimliPass);
 		
 		Tweet tweet3 = new Tweet();
 		tweet3.setContent("Psshh that still only counts as one follower! #Legolas41");
@@ -121,7 +128,9 @@ public class DatabaseSeeder  implements CommandLineRunner{
 		TweedleUser legolas= new TweedleUser();
 		legolas.setUserName("Legolas");
 		//initialize user.profile
-		//initialize user.credentials
+		UserCredentials legolasPass = new UserCredentials();
+		legolasPass.setPassword("Ninji");
+		legolas.setCredentials(legolasPass);
 		
 		Tweet tweet4 = new Tweet();
 		tweet4.setAuthor(legolas);

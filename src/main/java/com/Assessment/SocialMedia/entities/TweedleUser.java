@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -33,7 +34,8 @@ public class TweedleUser {
 	
 	//private Profile profile; //add embedded classes here
 	
-	//private Credentials credentials; //add embedded classes here
+	@Embedded
+	private UserCredentials credentials; 
 	
 	private boolean deleted;
 	
