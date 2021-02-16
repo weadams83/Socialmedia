@@ -35,7 +35,9 @@ public class TweedleUser {
 	//private Profile profile; //add embedded classes here
 	
 	@Embedded
-	private UserCredentials credentials; 
+	private UserCredentials credentials;
+	@Embedded
+	private Profile profile;
 	
 	private boolean deleted;
 	
