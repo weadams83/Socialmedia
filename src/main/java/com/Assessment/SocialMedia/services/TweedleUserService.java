@@ -15,4 +15,6 @@ public interface TweedleUserService {
 
 	TweedleUserResponseDTO patchUser(String userName, TweedleUserRequestDTO tUserRequestDTO);
 
+	TweedleUserResponseDTO deleteUser(String userName, TweedleUserRequestDTO tUserRequestDTO);
+
 }

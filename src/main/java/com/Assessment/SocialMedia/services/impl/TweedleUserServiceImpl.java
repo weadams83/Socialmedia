@@ -97,6 +97,23 @@ public class TweedleUserServiceImpl implements TweedleUserService{
 		tUserRepo.saveAndFlush(findUser.get());
 		return tUserMap.entityToResponseDTO(findUser.get());
 	}
+
+	@Override
+	public TweedleUserResponseDTO deleteUser(String userName, TweedleUserRequestDTO tUserRequestDTO) {
+		VetTweedleUserRequestDTO(tUserRequestDTO);
+		Optional<TweedleUser> findUser = tUserRepo.findByCredentialsUserNameIgnoreCase(userName);
+		if(findUser.isEmpty()) {
+			throw new NotFoundException(String.format("User with user name: %s could not be found.", userName));
+		}
+
+		if(!findUser.get().getCredentials().getUserName().equals(tUserRequestDTO.getCredentials().getUserName()) || 
+				!findUser.get().getCredentials().getPassword().equals(tUserRequestDTO.getCredentials().getPassword())){
+			throw new BadRequestException("User credentials do not match.");
+		}
+		findUser.get().setDeleted(true);
+		tUserRepo.saveAndFlush(findUser.get());
+		return tUserMap.entityToResponseDTO(findUser.get());
+	}
 	
 	private void VetTweedleUserRequestDTO(TweedleUserRequestDTO tUserRequestDTO) {
 		if(tUserRequestDTO.getCredentials().getPassword() == null || tUserRequestDTO.getCredentials().getPassword().length() == 0) {
