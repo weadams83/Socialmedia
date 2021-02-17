@@ -8,6 +8,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import com.Assessment.SocialMedia.entities.HashTag;
+import com.Assessment.SocialMedia.entities.Profile;
 import com.Assessment.SocialMedia.entities.Tweet;
 import com.Assessment.SocialMedia.entities.UserCredentials;
 import com.Assessment.SocialMedia.entities.TweedleUser;
@@ -27,13 +28,19 @@ public class DatabaseSeeder  implements CommandLineRunner{
 	
 	@Override
 	public void run(String... args) throws Exception {
+		//Uncomment to seed database, don't forget to modify application.properties (create-drop or update)
 //----------------------------------------------------------------------------------------------------------------//
 //		TweedleUser arwen = new TweedleUser();
 //		arwen.setUserName("Arwen");
-//		//initialize user.profile
+//		Profile profile = new Profile();
+//		profile.setEmail("arwen@gmail.com");
+//		profile.setFirstName("Arwen");
+//		profile.setLastName("Undomniel");
+//		profile.setPhone("828-743-6897");
 //		UserCredentials arwenPass = new UserCredentials();
 //		arwenPass.setPassword("EveningStar");
 //		arwen.setCredentials(arwenPass);
+//		arwen.setProfile(profile);
 //		Tweet tweet = new Tweet();
 //		tweet.setContent("OMG, look at gandalf's beard! #DadBod #WielderOfTheSecretFire");
 //		tweet.setAuthor(arwen);
@@ -65,10 +72,14 @@ public class DatabaseSeeder  implements CommandLineRunner{
 ////----------------------------------------------------------------------------------------------------------------//
 //		TweedleUser eowyn = new TweedleUser();
 //		eowyn.setUserName("Eowyn");
-//		//initialize user.profile
+//		profile.setEmail("eowyn@yahoo.com");
+//		profile.setFirstName("Eowyn");
+//		profile.setLastName("Eorl");
+//		profile.setPhone("919-453-6784");
 //		UserCredentials eowynPass = new UserCredentials();
 //		eowynPass.setPassword("IamNoMan");
 //		eowyn.setCredentials(eowynPass);
+//		eowyn.setProfile(profile);
 //		
 //		Tweet tweet2 = new Tweet();
 //		tweet2.setContent("You should see his instagram, Galadriel is a huge fan! Too bad he's all #YouShallNotPass");
@@ -96,10 +107,13 @@ public class DatabaseSeeder  implements CommandLineRunner{
 ////----------------------------------------------------------------------------------------------------------------//
 //		TweedleUser gimli = new TweedleUser();
 //		gimli.setUserName("Gimli");
-//		//initialize user.profile
-//		UserCredentials gimliPass = new UserCredentials();
+//		profile.setEmail("gimli@gmail.com");
+//		profile.setFirstName("Gimli");
+//		profile.setLastName("Gloin");
+//		profile.setPhone("422-483-4876");		UserCredentials gimliPass = new UserCredentials();
 //		gimliPass.setPassword("NaturalSprinter");
 //		gimli.setCredentials(gimliPass);
+//		gimli.setProfile(profile);
 //		
 //		Tweet tweet3 = new Tweet();
 //		tweet3.setContent("Psshh that still only counts as one follower! #Legolas41");
@@ -127,10 +141,14 @@ public class DatabaseSeeder  implements CommandLineRunner{
 ////----------------------------------------------------------------------------------------------------------------//
 //		TweedleUser legolas= new TweedleUser();
 //		legolas.setUserName("Legolas");
-//		//initialize user.profile
+//		profile.setEmail("legolas@protonmail.com");
+//		profile.setFirstName("Legolas");
+//		profile.setLastName("Thranduil");
+//		profile.setPhone("643-512-7845");
 //		UserCredentials legolasPass = new UserCredentials();
 //		legolasPass.setPassword("Ninji");
 //		legolas.setCredentials(legolasPass);
+//		legolas.setProfile(profile);
 //		
 //		Tweet tweet4 = new Tweet();
 //		tweet4.setAuthor(legolas);

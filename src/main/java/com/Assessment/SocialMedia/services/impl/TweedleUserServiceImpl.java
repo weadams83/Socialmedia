@@ -30,4 +30,13 @@ public class TweedleUserServiceImpl implements TweedleUserService{
 		}
 		return tUserMap.entitiesToResponseDTOs(tUsers.get());
 	}
+
+	@Override
+	public TweedleUserResponseDTO getUser(String userName) {
+		Optional<TweedleUser> findUser = tUserRepo.findByuserName(userName);
+		if(findUser.isEmpty()) {
+			throw new NotFoundException(String.format("User with user name: %s could not be found.", userName));
+		}
+		return tUserMap.entityToResponseDTO(findUser.get());
+	}
 }

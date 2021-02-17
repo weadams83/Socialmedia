@@ -8,4 +8,6 @@ public interface TweedleUserService {
 	
 	List<TweedleUserResponseDTO> getAllUsers();
 
+	TweedleUserResponseDTO getUser(String userName);
+
 }
