@@ -26,10 +26,7 @@ public class TweedleUser {
 	@Id
 	@GeneratedValue
 	private Long id;
-	
-//	@Column(nullable=false, unique=true)
-//	private String userName="";
-	
+
 	private final Timestamp joined = new Timestamp(System.currentTimeMillis());
 		
 	@Embedded

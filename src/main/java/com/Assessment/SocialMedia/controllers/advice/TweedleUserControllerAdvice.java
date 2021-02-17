@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.Assessment.SocialMedia.exceptions.BadRequestException;
+import com.Assessment.SocialMedia.exceptions.ImUsedException;
 import com.Assessment.SocialMedia.exceptions.NotFoundException;
 import com.Assessment.SocialMedia.model.ErrorDTO;
 
@@ -26,5 +27,11 @@ public class TweedleUserControllerAdvice {
 	@ExceptionHandler(BadRequestException.class)
 	public ErrorDTO handleBadRequestException(HttpServletRequest request, BadRequestException badRequestException) {
 		return new ErrorDTO(badRequestException.getMessage());
+	}
+	
+	@ResponseStatus(HttpStatus.IM_USED)
+	@ExceptionHandler(ImUsedException.class)
+	public ErrorDTO handleImUsedException(HttpServletRequest request, ImUsedException imUsedException) {
+		return new ErrorDTO(imUsedException.getMessage());
 	}
 }

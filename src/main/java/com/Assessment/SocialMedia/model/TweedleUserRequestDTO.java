@@ -12,9 +12,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class TweedleUserRequestDTO {
-	//private String userName;
 	
-	private Profile profile; //add embedded classes here
+	private Profile profile; 
 	
 	private UserCredentials credentials; 
 	
