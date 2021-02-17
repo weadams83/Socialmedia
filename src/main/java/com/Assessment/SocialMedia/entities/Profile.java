@@ -10,15 +10,15 @@ import lombok.Data;
 public class Profile {
 	
 	@Column
-	private String firstName;
-
+	private String firstName;			//firstName
+	
 	@Column
-	private String lastName;
-
+	private String lastName;			//lastName
+	
 	@Column(nullable = false)
-	private String email;
-
+	private String email;				//email
+	
 	@Column
-	private String phone;
+	private String phone;				//phone
 
 }

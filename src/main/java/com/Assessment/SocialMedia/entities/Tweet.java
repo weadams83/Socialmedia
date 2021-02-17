@@ -2,6 +2,8 @@ package com.Assessment.SocialMedia.entities;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Objects;
+
 import javax.persistence.JoinColumn;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -16,59 +18,61 @@ import javax.persistence.OneToOne;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+
 
 @Entity
 @NoArgsConstructor
-@Getter
-@Setter
+@Data
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+
 public class Tweet {
+	
 	@Id
 	@GeneratedValue
 	private Long id;
+	private final Timestamp posted = new Timestamp(System.currentTimeMillis());
+	private String content;
+	private boolean deleted;
 	
 	@ManyToOne
 	private TweedleUser author;
 	
-	private final Timestamp posted = new Timestamp(System.currentTimeMillis());
-	
-	private String content;
-	
+	/* Message Thread */
 	@OneToOne
 	private Tweet inReplyTo;
-	
 	@OneToOne
 	private Tweet repostOf;
 	
-	private boolean deleted;
-	
+	/* Hash Tags */
 	@ManyToMany//(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinTable(name = "tweetHashJoin",
 			joinColumns = @JoinColumn(name = "tweet_id"),
 			inverseJoinColumns = @JoinColumn(name = "hashTag_id"))
 	private List<HashTag> hashtags;
 	
+	
+	
+	
 	@Override
 	public boolean equals(Object obj) {
+		
+		// check null and class
+		if(obj == null || obj.getClass() != this.getClass()) {
+			return false;
+		}
+		// check pointer
     	if(obj == this) {
     		return true;
     	}
-    	if(obj == null || obj.getClass() != this.getClass()) {
-    		return false;
-    	}
+    	// check id
     	Tweet tweet = (Tweet) obj;
     	return tweet.getId() == this.getId();
     }
 	
 	@Override
     public int hashCode() {
-    	int hash = 7;
-    	for (int i = 0; i < this.getContent().length(); i++) {
-    	    hash = hash*31 + this.getContent().charAt(i);
-    	}
-    	return hash;
+    	return Objects.hash(this.getContent());
     }
 }
