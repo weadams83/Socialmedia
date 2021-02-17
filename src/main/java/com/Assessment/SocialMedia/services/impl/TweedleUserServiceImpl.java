@@ -33,7 +33,7 @@ public class TweedleUserServiceImpl implements TweedleUserService{
 
 	@Override
 	public TweedleUserResponseDTO getUser(String userName) {
-		Optional<TweedleUser> findUser = tUserRepo.findByuserName(userName);
+		Optional<TweedleUser> findUser = tUserRepo.findByCredentialsUserNameIgnoreCase(userName);
 		if(findUser.isEmpty()) {
 			throw new NotFoundException(String.format("User with user name: %s could not be found.", userName));
 		}

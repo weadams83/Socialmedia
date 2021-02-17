@@ -27,13 +27,11 @@ public class TweedleUser {
 	@GeneratedValue
 	private Long id;
 	
-	@Column(nullable=false, unique=true)
-	private String userName="";
+//	@Column(nullable=false, unique=true)
+//	private String userName="";
 	
 	private final Timestamp joined = new Timestamp(System.currentTimeMillis());
-	
-	//private Profile profile; //add embedded classes here
-	
+		
 	@Embedded
 	private UserCredentials credentials;
 	@Embedded
@@ -59,8 +57,8 @@ public class TweedleUser {
 	@Override
     public int hashCode() {
     	int hash = 7;
-    	for (int i = 0; i < this.getUserName().length(); i++) {
-    	    hash = hash*31 + this.getUserName().charAt(i);
+    	for (int i = 0; i < this.getCredentials().getUserName().length(); i++) {
+    	    hash = hash*31 + this.getCredentials().getUserName().charAt(i);
     	}
     	return hash;
     }

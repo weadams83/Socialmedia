@@ -26,7 +26,7 @@ public class TweedleUserController {
 		return userServ.getAllUsers();
 	}
 	
-	//should this method/endpoint be case-insensitive? Also "an error should be sent in lieu of response." Does this mean an exception?
+	//Should send "an error should be sent in lieu of response." Does this mean an exception?
 	@RequestMapping(value = "/{username}", method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.FOUND)
 	public TweedleUserResponseDTO getUser(@PathVariable("username") String userName) {
