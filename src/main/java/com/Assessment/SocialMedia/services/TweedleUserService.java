@@ -13,4 +13,6 @@ public interface TweedleUserService {
 
 	TweedleUserResponseDTO postUser(TweedleUserRequestDTO tUserRequestDTO);
 
+	TweedleUserResponseDTO patchUser(String userName, TweedleUserRequestDTO tUserRequestDTO);
+
 }

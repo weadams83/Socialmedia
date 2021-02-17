@@ -41,4 +41,10 @@ public class TweedleUserController {
 		return userServ.postUser(tUserRequestDTO);
 	}
 	
+	@RequestMapping(value = "/{username}", method = RequestMethod.PATCH)
+	@ResponseStatus(HttpStatus.ACCEPTED)
+	public TweedleUserResponseDTO patchUser(@PathVariable("username") String userName, @RequestBody TweedleUserRequestDTO tUserRequestDTO) {
+		return userServ.patchUser(userName,tUserRequestDTO);
+	}
+	
 }
