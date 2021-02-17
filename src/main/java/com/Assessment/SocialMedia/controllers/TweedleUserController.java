@@ -47,4 +47,10 @@ public class TweedleUserController {
 		return userServ.patchUser(userName,tUserRequestDTO);
 	}
 	
+	@RequestMapping(value = "/{username}", method = RequestMethod.DELETE)
+	@ResponseStatus(HttpStatus.OK)
+	public TweedleUserResponseDTO deleteUser(@PathVariable("username") String userName, @RequestBody TweedleUserRequestDTO tUserRequestDTO) {
+		return userServ.deleteUser(userName,tUserRequestDTO);
+	}
+	
 }
