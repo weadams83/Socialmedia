@@ -2,6 +2,7 @@ package com.Assessment.SocialMedia.entities;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -13,55 +14,64 @@ import javax.persistence.OneToMany;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+
+
 
 @Entity
 @NoArgsConstructor
-@Getter
-@Setter
+@Data
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+
 public class TweedleUser {
+	
 	@Id
 	@GeneratedValue
-	private Long id;
+	private Long id;															//id
+	private final Timestamp joined = new Timestamp(System.currentTimeMillis()); //joined date/time
+	private boolean deleted;													//deleted
+	@Column(nullable = false, unique = true)
+	private String userName = "";												//userName
+
+	@OneToMany(mappedBy = "author")
+	private List<Tweet> tweets;													//tweets
 	
-	@Column(nullable=false, unique=true)
-	private String userName="";
-	
-	private final Timestamp joined = new Timestamp(System.currentTimeMillis());
-	
-	//private Profile profile; //add embedded classes here
-	
+	/* Add embedded classes here */
 	@Embedded
-	private UserCredentials credentials;
+	private Profile profile;													//profile
 	@Embedded
-	private Profile profile;
+	private UserCredentials credentials;										//credentials
+	/* End Embedded */
 	
-	private boolean deleted;
 	
-	@OneToMany(mappedBy="author")
-	private List<Tweet> tweets;
 	
+	/*
+	 * equals() compares the database entries by id and the objects 
+	 * in memory in Java
+	 */
 	@Override
 	public boolean equals(Object obj) {
-    	if(obj == this) {
-    		return true;
-    	}
-    	if(obj == null || obj.getClass() != this.getClass()) {
-    		return false;
-    	}
-    	TweedleUser tweedleUser = (TweedleUser) obj;
-    	return tweedleUser.getId() == this.getId();
-    }
-	
+		
+		//check null and class
+		if (obj == null || obj.getClass() != this.getClass()) {
+			return false;
+		}
+		
+		//compare pointers
+		if (obj == this) {
+			return true;
+		}
+		
+		//compare id's
+		return ((TweedleUser) obj).getId() == this.getId();
+	}
+
 	@Override
-    public int hashCode() {
-    	int hash = 7;
-    	for (int i = 0; i < this.getUserName().length(); i++) {
-    	    hash = hash*31 + this.getUserName().charAt(i);
-    	}
-    	return hash;
-    }
+	public int hashCode() {
+		/* Simplified hash. Use id field instead of username,
+		 * since username can change in the database.
+		 */
+		return Objects.hash(this.id);
+	}
 }
