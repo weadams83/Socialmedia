@@ -31,8 +31,6 @@ public class TweedleUser {
 	private Long id;															//id
 	private final Timestamp joined = new Timestamp(System.currentTimeMillis()); //joined date/time
 	private boolean deleted;													//deleted
-	@Column(nullable = false, unique = true)
-	private String userName = "";												//userName
 
 	@OneToMany(mappedBy = "author")
 	private List<Tweet> tweets;													//tweets
