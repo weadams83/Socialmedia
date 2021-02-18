@@ -226,5 +226,18 @@ public class TweedleUserServiceImpl implements TweedleUserService{
 		List<TweedleUser> myFollowers = tUserRepo.getMyFollowers(findUser.get().getId());
 		return tUserMap.entitiesToResponseDTOs(myFollowers);
 	}
+
+	@Override
+	public List<TweedleUserResponseDTO> getUserFollowing(String userName) {
+		Optional<TweedleUser> findUser = tUserRepo.findByCredentialsUserNameIgnoreCase(userName);
+		if(findUser.isEmpty()) {
+			throw new NotFoundException(String.format("User with username: %s could not be found.", userName));
+		}
+		if(findUser.get().isDeleted()) {
+			throw new NotFoundException(String.format("User with username: %s has deleted their account.", userName));		
+		}
+		List<TweedleUser> whoIFollow = tUserRepo.getWhoIFollow(findUser.get().getId());
+		return tUserMap.entitiesToResponseDTOs(whoIFollow);
+	}
 	
 }
