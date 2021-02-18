@@ -37,10 +37,10 @@ public class TweedleUserServiceImpl implements TweedleUserService{
 	public TweedleUserResponseDTO getUser(String userName) {
 		Optional<TweedleUser> findUser = tUserRepo.findByCredentialsUserNameIgnoreCase(userName);
 		if(findUser.isEmpty()) {
-			throw new NotFoundException(String.format("User with user name: %s could not be found.", userName));
+			throw new NotFoundException(String.format("User with username: %s could not be found.", userName));
 		}
 		if(findUser.get().isDeleted()) {
-			throw new NotFoundException(String.format("User with user name: %s has deleted their account.", userName));
+			throw new NotFoundException(String.format("User with username: %s has deleted their account.", userName));
 		}
 		return tUserMap.entityToResponseDTO(findUser.get());
 	}
@@ -73,10 +73,10 @@ public class TweedleUserServiceImpl implements TweedleUserService{
 		TweedleUser tUser = tUserMap.requestDTOtoEntity(tUserRequestDTO);
 		Optional<TweedleUser> findUser = tUserRepo.findByCredentialsUserNameIgnoreCase(tUser.getCredentials().getUserName());
 		if(findUser.isEmpty()) {
-			throw new NotFoundException(String.format("User with user name: %s could not be found.", tUser.getCredentials().getUserName()));
+			throw new NotFoundException(String.format("User with username: %s could not be found.", tUser.getCredentials().getUserName()));
 		}
 		if(findUser.get().isDeleted()) {
-			throw new NotFoundException(String.format("User with user name: %s has deleted their account.", tUser.getCredentials().getUserName()));
+			throw new NotFoundException(String.format("User with username: %s has deleted their account.", tUser.getCredentials().getUserName()));
 		}
 		if(!tUser.getCredentials().getPassword().equals(findUser.get().getCredentials().getPassword())) {
 			throw new BadRequestException("Incorrect password.");
@@ -103,7 +103,7 @@ public class TweedleUserServiceImpl implements TweedleUserService{
 		VetTweedleUserRequestDTO(tUserRequestDTO);
 		Optional<TweedleUser> findUser = tUserRepo.findByCredentialsUserNameIgnoreCase(userName);
 		if(findUser.isEmpty()) {
-			throw new NotFoundException(String.format("User with user name: %s could not be found.", userName));
+			throw new NotFoundException(String.format("User with username: %s could not be found.", userName));
 		}
 
 		if(!findUser.get().getCredentials().getUserName().equals(tUserRequestDTO.getCredentials().getUserName()) || 
@@ -113,6 +113,29 @@ public class TweedleUserServiceImpl implements TweedleUserService{
 		findUser.get().setDeleted(true);
 		tUserRepo.saveAndFlush(findUser.get());
 		return tUserMap.entityToResponseDTO(findUser.get());
+	}
+	
+	@Override
+	public void postUserFollow(String username,TweedleUserRequestDTO tUserRequestDTO) {
+		VetTweedleUserRequestDTO(tUserRequestDTO);
+		Optional<TweedleUser> findUser = tUserRepo.findByCredentialsUserNameIgnoreCase(tUserRequestDTO.getCredentials().getUserName());
+		if(findUser.isEmpty()) {
+			throw new BadRequestException(String.format("You can't follow anyone, your username %s doesn't exist.", tUserRequestDTO.getCredentials().getUserName()));
+		}
+		Optional<TweedleUser> findCelebrity = tUserRepo.findByCredentialsUserNameIgnoreCase(username);
+		if(findCelebrity.isEmpty()) {
+			throw new BadRequestException(String.format("Can't follow %s, username doesn't exist.", username));
+		}
+		if(findCelebrity.get().isDeleted()) {
+			throw new BadRequestException(String.format("Can't follow %s, username has been deleted.", username));
+		}
+		if(findCelebrity.get().getFollowedBy().contains(findUser.get())) {
+			throw new BadRequestException(String.format("You are already following this person."));
+		}
+		List<TweedleUser> getFans = findCelebrity.get().getFollowedBy();
+		getFans.add(findUser.get());
+		findCelebrity.get().setFollowedBy(getFans);
+		tUserRepo.saveAndFlush(findCelebrity.get());
 	}
 	
 	private void VetTweedleUserRequestDTO(TweedleUserRequestDTO tUserRequestDTO) {

@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
@@ -39,6 +40,12 @@ public class Tweet {
 	@ManyToOne
 	private TweedleUser author;
 	
+	@ManyToMany
+	@JoinTable(name = "mentionedUsers",
+		joinColumns = @JoinColumn(name = "mentions"),
+		inverseJoinColumns = @JoinColumn(name = "mentioned"))
+	private List<TweedleUser> mentions;
+	
 	/* Message Thread */
 	@OneToOne
 	private Tweet inReplyTo;
@@ -46,7 +53,7 @@ public class Tweet {
 	private Tweet repostOf;
 	
 	/* Hash Tags */
-	@ManyToMany//(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@ManyToMany
 	@JoinTable(name = "tweetHashJoin",
 			joinColumns = @JoinColumn(name = "tweet_id"),
 			inverseJoinColumns = @JoinColumn(name = "hashTag_id"))

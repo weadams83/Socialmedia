@@ -22,14 +22,13 @@ import lombok.AllArgsConstructor;
 public class TweedleUserController {
 	private TweedleUserService userServ;
 	
-	@GetMapping
+	@RequestMapping(method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	public List<TweedleUserResponseDTO> getAllUsers(){
 		return userServ.getAllUsers();
 	}
 	
-	//TODO: Should send "an error should be sent in lieu of response." Does this mean an exception?
-	@RequestMapping(value = "/{username}", method = RequestMethod.GET)
+	@RequestMapping(value = "/@{username}", method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.FOUND)
 	public TweedleUserResponseDTO getUser(@PathVariable("username") String userName) {
 		return userServ.getUser(userName);
@@ -41,13 +40,19 @@ public class TweedleUserController {
 		return userServ.postUser(tUserRequestDTO);
 	}
 	
-	@RequestMapping(value = "/{username}", method = RequestMethod.PATCH)
+	@RequestMapping(value = "/@{username}/follow", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.CREATED)
+	public void postUserFollow(@PathVariable("username") String username,@RequestBody TweedleUserRequestDTO tUserRequestDTO) {
+		userServ.postUserFollow(username,tUserRequestDTO);
+	}
+	
+	@RequestMapping(value = "/@{username}", method = RequestMethod.PATCH)
 	@ResponseStatus(HttpStatus.ACCEPTED)
 	public TweedleUserResponseDTO patchUser(@PathVariable("username") String userName, @RequestBody TweedleUserRequestDTO tUserRequestDTO) {
 		return userServ.patchUser(userName,tUserRequestDTO);
 	}
 	
-	@RequestMapping(value = "/{username}", method = RequestMethod.DELETE)
+	@RequestMapping(value = "/@{username}", method = RequestMethod.DELETE)
 	@ResponseStatus(HttpStatus.OK)
 	public TweedleUserResponseDTO deleteUser(@PathVariable("username") String userName, @RequestBody TweedleUserRequestDTO tUserRequestDTO) {
 		return userServ.deleteUser(userName,tUserRequestDTO);
