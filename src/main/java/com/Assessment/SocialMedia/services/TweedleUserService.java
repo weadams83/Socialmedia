@@ -19,4 +19,6 @@ public interface TweedleUserService {
 
 	void postUserFollow(String username, TweedleUserRequestDTO tUserRequestDTO);
 
+	void postUserUnfollow(String username, TweedleUserRequestDTO tUserRequestDTO);
+
 }
