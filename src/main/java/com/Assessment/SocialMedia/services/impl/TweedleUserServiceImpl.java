@@ -6,13 +6,17 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.Assessment.SocialMedia.entities.TweedleUser;
+import com.Assessment.SocialMedia.entities.Tweet;
 import com.Assessment.SocialMedia.exceptions.BadRequestException;
 import com.Assessment.SocialMedia.exceptions.ImUsedException;
 import com.Assessment.SocialMedia.exceptions.NotFoundException;
 import com.Assessment.SocialMedia.mappers.TweedleUserMapper;
+import com.Assessment.SocialMedia.mappers.TweetMapper;
 import com.Assessment.SocialMedia.model.TweedleUserRequestDTO;
 import com.Assessment.SocialMedia.model.TweedleUserResponseDTO;
+import com.Assessment.SocialMedia.model.TweetFeedResponseDTO;
 import com.Assessment.SocialMedia.repositories.TweedleUserRepository;
+import com.Assessment.SocialMedia.repositories.TweetRepository;
 import com.Assessment.SocialMedia.services.TweedleUserService;
 
 import lombok.AllArgsConstructor;
@@ -21,7 +25,9 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class TweedleUserServiceImpl implements TweedleUserService{
 	private TweedleUserRepository tUserRepo;
+	private TweetRepository tweetRepo;
 	private TweedleUserMapper tUserMap;
+	private TweetMapper tweetMap;
 
 	@Override
 	public List<TweedleUserResponseDTO> getAllUsers() {
@@ -35,6 +41,7 @@ public class TweedleUserServiceImpl implements TweedleUserService{
 
 	@Override
 	public TweedleUserResponseDTO getUser(String userName) {
+
 		Optional<TweedleUser> findUser = tUserRepo.findByCredentialsUserNameIgnoreCase(userName);
 		if(findUser.isEmpty()) {
 			throw new NotFoundException(String.format("User with username: %s could not be found.", userName));
@@ -43,6 +50,21 @@ public class TweedleUserServiceImpl implements TweedleUserService{
 			throw new NotFoundException(String.format("User with username: %s has deleted their account.", userName));
 		}
 		return tUserMap.entityToResponseDTO(findUser.get());
+	}
+	
+	@Override
+	public List<TweetFeedResponseDTO> getUserFeed(String userName) {
+		Optional<TweedleUser> tUser = tUserRepo.findByCredentialsUserNameIgnoreCase(userName);
+		if(tUser.isEmpty()) {
+			throw new NotFoundException(String.format("User with username: %s could not be found.", userName));
+		}
+		if(tUser.get().isDeleted()) {
+			throw new NotFoundException(String.format("User with username: %s has deleted their account.", userName));
+		}
+		Optional<List<Tweet>> tweetFeed = tweetRepo.getTweetFeed(tUser.get().getId());
+		List<TweetFeedResponseDTO> tweetFeedDTO = tweetMap.entitiesToDTOs(tweetFeed.get());
+		return tweetFeedDTO;
+		
 	}
 
 	@Override
@@ -169,6 +191,5 @@ public class TweedleUserServiceImpl implements TweedleUserService{
 			throw new BadRequestException("User must have a Username.");
 		}
 	}
-
 	
 }

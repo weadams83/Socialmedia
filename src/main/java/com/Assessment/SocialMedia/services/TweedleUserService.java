@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.Assessment.SocialMedia.model.TweedleUserRequestDTO;
 import com.Assessment.SocialMedia.model.TweedleUserResponseDTO;
+import com.Assessment.SocialMedia.model.TweetFeedResponseDTO;
 
 public interface TweedleUserService {
 	
@@ -20,5 +21,7 @@ public interface TweedleUserService {
 	void postUserFollow(String username, TweedleUserRequestDTO tUserRequestDTO);
 
 	void postUserUnfollow(String username, TweedleUserRequestDTO tUserRequestDTO);
+
+	List<TweetFeedResponseDTO> getUserFeed(String userName);
 
 }
