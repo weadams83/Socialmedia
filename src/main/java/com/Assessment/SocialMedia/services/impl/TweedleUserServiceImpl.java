@@ -182,6 +182,20 @@ public class TweedleUserServiceImpl implements TweedleUserService{
 		findCelebrity.get().setFollowedBy(getFans);
 		tUserRepo.saveAndFlush(findCelebrity.get());
 	}
+
+	@Override
+	public List<TweetFeedResponseDTO> getUserTweets(String userName) {
+		Optional<TweedleUser> findUser = tUserRepo.findByCredentialsUserNameIgnoreCase(userName);
+		if(findUser.isEmpty()) {
+			throw new NotFoundException(String.format("User with username: %s could not be found.", userName));
+		}
+		if(findUser.get().isDeleted()) {
+			throw new NotFoundException(String.format("User with username: %s has deleted their account.", userName));
+		}
+		Optional<List<Tweet>> getTweets = tweetRepo.getMyTweets(findUser.get().getId());
+		return tweetMap.entitiesToDTOs(getTweets.get());
+	}
+	
 	
 	private void VetTweedleUserRequestDTO(TweedleUserRequestDTO tUserRequestDTO) {
 		if(tUserRequestDTO.getCredentials().getPassword() == null || tUserRequestDTO.getCredentials().getPassword().length() == 0) {

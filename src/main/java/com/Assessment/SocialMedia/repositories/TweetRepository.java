@@ -18,5 +18,8 @@ public interface TweetRepository  extends JpaRepository<Tweet,Long>{
 			+ " WHERE t.author_id = :author_id AND t.deleted=false And w.deleted=false) Or t.author_id=:author_id Order By t.posted Desc",
             nativeQuery = true)
 	Optional<List<Tweet>> getTweetFeed(@Param("author_id") Long author_id);
-
+	
+	@Query(value = " Select * from Tweet t Where t.author_id = :author_id AND t.deleted = false Order By t.posted DESC",
+            nativeQuery = true)
+	Optional<List<Tweet>> getMyTweets(@Param("author_id") Long author_id);
 }

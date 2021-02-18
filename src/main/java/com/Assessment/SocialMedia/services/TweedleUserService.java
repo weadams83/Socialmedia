@@ -24,4 +24,6 @@ public interface TweedleUserService {
 
 	List<TweetFeedResponseDTO> getUserFeed(String userName);
 
+	List<TweetFeedResponseDTO> getUserTweets(String userName);
+
 }
