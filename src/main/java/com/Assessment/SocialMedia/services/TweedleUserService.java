@@ -31,4 +31,6 @@ public interface TweedleUserService {
 
 	List<TweedleUserResponseDTO> getUserFollowers(String userName);
 
+	List<TweedleUserResponseDTO> getUserFollowing(String userName);
+
 }
