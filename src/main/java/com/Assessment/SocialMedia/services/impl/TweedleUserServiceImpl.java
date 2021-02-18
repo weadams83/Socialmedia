@@ -29,6 +29,15 @@ public class TweedleUserServiceImpl implements TweedleUserService{
 	private TweetRepository tweetRepo;
 	private TweedleUserMapper tUserMap;
 	private TweetMapper tweetMap;
+	
+	private void VetTweedleUserRequestDTO(TweedleUserRequestDTO tUserRequestDTO) {
+		if(tUserRequestDTO.getCredentials().getPassword() == null || tUserRequestDTO.getCredentials().getPassword().length() == 0) {
+			throw new BadRequestException("User must have a Password.");
+		}
+		if(tUserRequestDTO.getCredentials().getUserName() == null || tUserRequestDTO.getCredentials().getUserName().length() == 0) {
+			throw new BadRequestException("User must have a Username.");
+		}
+	}
 
 	@Override
 	public List<TweedleUserResponseDTO> getAllUsers() {
@@ -38,7 +47,6 @@ public class TweedleUserServiceImpl implements TweedleUserService{
 
 	@Override
 	public TweedleUserResponseDTO getUser(String userName) {
-
 		Optional<TweedleUser> findUser = tUserRepo.findByCredentialsUserNameIgnoreCase(userName);
 		if(findUser.isEmpty()) {
 			throw new NotFoundException(String.format("User with username: %s could not be found.", userName));
@@ -193,16 +201,6 @@ public class TweedleUserServiceImpl implements TweedleUserService{
 		return tweetMap.entitiesToDTOs(getTweets);
 	}
 	
-	
-	private void VetTweedleUserRequestDTO(TweedleUserRequestDTO tUserRequestDTO) {
-		if(tUserRequestDTO.getCredentials().getPassword() == null || tUserRequestDTO.getCredentials().getPassword().length() == 0) {
-			throw new BadRequestException("User must have a Password.");
-		}
-		if(tUserRequestDTO.getCredentials().getUserName() == null || tUserRequestDTO.getCredentials().getUserName().length() == 0) {
-			throw new BadRequestException("User must have a Username.");
-		}
-	}
-
 	@Override
 	public List<TweetResponseDTO> getUserMentions(String userName) {
 		Optional<TweedleUser> findUser = tUserRepo.findByCredentialsUserNameIgnoreCase(userName);
@@ -214,6 +212,19 @@ public class TweedleUserServiceImpl implements TweedleUserService{
 		}
 		List<Tweet> myMentions = tweetRepo.getMyMentions(findUser.get().getId());
 		return tweetMap.entitiesToResponseDTOs(myMentions);
+	}
+
+	@Override
+	public List<TweedleUserResponseDTO> getUserFollowers(String userName) {
+		Optional<TweedleUser> findUser = tUserRepo.findByCredentialsUserNameIgnoreCase(userName);
+		if(findUser.isEmpty()) {
+			throw new NotFoundException(String.format("User with username: %s could not be found.", userName));
+		}
+		if(findUser.get().isDeleted()) {
+			throw new NotFoundException(String.format("User with username: %s has deleted their account.", userName));		
+		}
+		List<TweedleUser> myFollowers = tUserRepo.getMyFollowers(findUser.get().getId());
+		return tUserMap.entitiesToResponseDTOs(myFollowers);
 	}
 	
 }
