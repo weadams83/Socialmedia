@@ -56,6 +56,12 @@ public class TweedleUserController {
 		return userServ.getUserMentions(userName);
 	}
 	
+	@GetMapping(value = "/@{username}/followers")
+	@ResponseStatus(HttpStatus.FOUND)
+	public List<TweedleUserResponseDTO> getUserFollowers(@PathVariable("username") String userName) {
+		return userServ.getUserFollowers(userName);
+	}
+	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public TweedleUserResponseDTO postUser(@RequestBody TweedleUserRequestDTO tUserRequestDTO) {
