@@ -3,11 +3,13 @@ package com.Assessment.SocialMedia.controllers;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,61 +26,61 @@ import lombok.AllArgsConstructor;
 public class TweedleUserController {
 	private TweedleUserService userServ;
 	
-	@RequestMapping(method = RequestMethod.GET)
+	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
 	public List<TweedleUserResponseDTO> getAllUsers(){
 		return userServ.getAllUsers();
 	}
 	
-	@RequestMapping(value = "/@{username}", method = RequestMethod.GET)
+	@GetMapping("/@{username}")
 	@ResponseStatus(HttpStatus.FOUND)
 	public TweedleUserResponseDTO getUser(@PathVariable("username") String userName) {
 		return userServ.getUser(userName);
 	}
 	
-	@RequestMapping(value = "/@{username}/feed", method = RequestMethod.GET)
+	@GetMapping("/@{username}/feed")
 	@ResponseStatus(HttpStatus.FOUND)
 	public List<TweetFeedResponseDTO> getUserFeed(@PathVariable("username") String userName) {
 		return userServ.getUserFeed(userName);
 	}
 	
-	@RequestMapping(value = "/@{username}/tweets", method = RequestMethod.GET)
+	@GetMapping("/@{username}/tweets")
 	@ResponseStatus(HttpStatus.FOUND)
 	public List<TweetFeedResponseDTO> getUserTweets(@PathVariable("username") String userName) {
 		return userServ.getUserTweets(userName);
 	}
 	
-	@RequestMapping(value = "/@{username}/mentions", method = RequestMethod.GET)
+	@GetMapping(value = "/@{username}/mentions")
 	@ResponseStatus(HttpStatus.FOUND)
 	public List<TweetResponseDTO> getUserMentions(@PathVariable("username") String userName) {
 		return userServ.getUserMentions(userName);
 	}
 	
-	@RequestMapping(method = RequestMethod.POST)
+	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public TweedleUserResponseDTO postUser(@RequestBody TweedleUserRequestDTO tUserRequestDTO) {
 		return userServ.postUser(tUserRequestDTO);
 	}
 	
-	@RequestMapping(value = "/@{username}/follow", method = RequestMethod.POST)
+	@PostMapping("/@{username}/follow")
 	@ResponseStatus(HttpStatus.CREATED)
 	public void postUserFollow(@PathVariable("username") String username,@RequestBody TweedleUserRequestDTO tUserRequestDTO) {
 		userServ.postUserFollow(username,tUserRequestDTO);
 	}
 	
-	@RequestMapping(value = "/@{username}/unfollow", method = RequestMethod.POST)
+	@PostMapping("/@{username}/unfollow")
 	@ResponseStatus(HttpStatus.OK)
 	public void postUserUnfollow(@PathVariable("username") String username,@RequestBody TweedleUserRequestDTO tUserRequestDTO) {
 		userServ.postUserUnfollow(username,tUserRequestDTO);
 	}
 	
-	@RequestMapping(value = "/@{username}", method = RequestMethod.PATCH)
+	@PatchMapping("/@{username}")
 	@ResponseStatus(HttpStatus.ACCEPTED)
 	public TweedleUserResponseDTO patchUser(@PathVariable("username") String userName, @RequestBody TweedleUserRequestDTO tUserRequestDTO) {
 		return userServ.patchUser(userName,tUserRequestDTO);
 	}
 	
-	@RequestMapping(value = "/@{username}", method = RequestMethod.DELETE)
+	@DeleteMapping("/@{username}")
 	@ResponseStatus(HttpStatus.OK)
 	public TweedleUserResponseDTO deleteUser(@PathVariable("username") String userName, @RequestBody TweedleUserRequestDTO tUserRequestDTO) {
 		return userServ.deleteUser(userName,tUserRequestDTO);
