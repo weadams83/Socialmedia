@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.Assessment.SocialMedia.model.TweetResponseDTO;
+import com.Assessment.SocialMedia.DTOs.TweetResponseDTO;
 import com.Assessment.SocialMedia.services.TweetService;
 
 import lombok.AllArgsConstructor;

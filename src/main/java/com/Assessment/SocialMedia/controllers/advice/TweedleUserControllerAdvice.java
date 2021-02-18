@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.Assessment.SocialMedia.DTOs.ErrorDTO;
 import com.Assessment.SocialMedia.exceptions.BadRequestException;
 import com.Assessment.SocialMedia.exceptions.ImUsedException;
 import com.Assessment.SocialMedia.exceptions.NotFoundException;
-import com.Assessment.SocialMedia.model.ErrorDTO;
 
 @ControllerAdvice(basePackages = {"com.Assessment.SocialMedia.controllers"})
 @ResponseBody

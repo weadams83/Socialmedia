@@ -5,6 +5,10 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.Assessment.SocialMedia.DTOs.TweedleUserRequestDTO;
+import com.Assessment.SocialMedia.DTOs.TweedleUserResponseDTO;
+import com.Assessment.SocialMedia.DTOs.TweetFeedResponseDTO;
+import com.Assessment.SocialMedia.DTOs.TweetResponseDTO;
 import com.Assessment.SocialMedia.entities.TweedleUser;
 import com.Assessment.SocialMedia.entities.Tweet;
 import com.Assessment.SocialMedia.exceptions.BadRequestException;
@@ -12,9 +16,6 @@ import com.Assessment.SocialMedia.exceptions.ImUsedException;
 import com.Assessment.SocialMedia.exceptions.NotFoundException;
 import com.Assessment.SocialMedia.mappers.TweedleUserMapper;
 import com.Assessment.SocialMedia.mappers.TweetMapper;
-import com.Assessment.SocialMedia.model.TweedleUserRequestDTO;
-import com.Assessment.SocialMedia.model.TweedleUserResponseDTO;
-import com.Assessment.SocialMedia.model.TweetFeedResponseDTO;
 import com.Assessment.SocialMedia.repositories.TweedleUserRepository;
 import com.Assessment.SocialMedia.repositories.TweetRepository;
 import com.Assessment.SocialMedia.services.TweedleUserService;
@@ -31,12 +32,8 @@ public class TweedleUserServiceImpl implements TweedleUserService{
 
 	@Override
 	public List<TweedleUserResponseDTO> getAllUsers() {
-		Optional<List<TweedleUser>> tUsers = tUserRepo.queryByDeletedFalse();
-		if(tUsers.isEmpty() || tUsers.get().size() == 0) {
-			throw new NotFoundException("There are currently no users.");
-
-		}
-		return tUserMap.entitiesToResponseDTOs(tUsers.get());
+		List<TweedleUser> tUsers = tUserRepo.queryByDeletedFalse();
+		return tUserMap.entitiesToResponseDTOs(tUsers);
 	}
 
 	@Override
@@ -61,8 +58,8 @@ public class TweedleUserServiceImpl implements TweedleUserService{
 		if(tUser.get().isDeleted()) {
 			throw new NotFoundException(String.format("User with username: %s has deleted their account.", userName));
 		}
-		Optional<List<Tweet>> tweetFeed = tweetRepo.getTweetFeed(tUser.get().getId());
-		List<TweetFeedResponseDTO> tweetFeedDTO = tweetMap.entitiesToDTOs(tweetFeed.get());
+		List<Tweet> tweetFeed = tweetRepo.getTweetFeed(tUser.get().getId());
+		List<TweetFeedResponseDTO> tweetFeedDTO = tweetMap.entitiesToDTOs(tweetFeed);
 		return tweetFeedDTO;
 		
 	}
@@ -192,8 +189,8 @@ public class TweedleUserServiceImpl implements TweedleUserService{
 		if(findUser.get().isDeleted()) {
 			throw new NotFoundException(String.format("User with username: %s has deleted their account.", userName));
 		}
-		Optional<List<Tweet>> getTweets = tweetRepo.getMyTweets(findUser.get().getId());
-		return tweetMap.entitiesToDTOs(getTweets.get());
+		List<Tweet> getTweets = tweetRepo.getMyTweets(findUser.get().getId());
+		return tweetMap.entitiesToDTOs(getTweets);
 	}
 	
 	
@@ -204,6 +201,19 @@ public class TweedleUserServiceImpl implements TweedleUserService{
 		if(tUserRequestDTO.getCredentials().getUserName() == null || tUserRequestDTO.getCredentials().getUserName().length() == 0) {
 			throw new BadRequestException("User must have a Username.");
 		}
+	}
+
+	@Override
+	public List<TweetResponseDTO> getUserMentions(String userName) {
+		Optional<TweedleUser> findUser = tUserRepo.findByCredentialsUserNameIgnoreCase(userName);
+		if(findUser.isEmpty()) {
+			throw new NotFoundException(String.format("User with username: %s could not be found.", userName));
+		}
+		if(findUser.get().isDeleted()) {
+			throw new NotFoundException(String.format("User with username: %s has deleted their account.", userName));		
+		}
+		List<Tweet> myMentions = tweetRepo.getMyMentions(findUser.get().getId());
+		return tweetMap.entitiesToResponseDTOs(myMentions);
 	}
 	
 }

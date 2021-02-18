@@ -2,7 +2,7 @@ package com.Assessment.SocialMedia.services;
 
 import java.util.List;
 
-import com.Assessment.SocialMedia.model.HashTagResponseDTO;
+import com.Assessment.SocialMedia.DTOs.HashTagResponseDTO;
 
 public interface HashTagService {
 

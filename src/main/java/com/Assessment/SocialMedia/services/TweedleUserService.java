@@ -2,9 +2,10 @@ package com.Assessment.SocialMedia.services;
 
 import java.util.List;
 
-import com.Assessment.SocialMedia.model.TweedleUserRequestDTO;
-import com.Assessment.SocialMedia.model.TweedleUserResponseDTO;
-import com.Assessment.SocialMedia.model.TweetFeedResponseDTO;
+import com.Assessment.SocialMedia.DTOs.TweedleUserRequestDTO;
+import com.Assessment.SocialMedia.DTOs.TweedleUserResponseDTO;
+import com.Assessment.SocialMedia.DTOs.TweetFeedResponseDTO;
+import com.Assessment.SocialMedia.DTOs.TweetResponseDTO;
 
 public interface TweedleUserService {
 	
@@ -25,5 +26,7 @@ public interface TweedleUserService {
 	List<TweetFeedResponseDTO> getUserFeed(String userName);
 
 	List<TweetFeedResponseDTO> getUserTweets(String userName);
+
+	List<TweetResponseDTO> getUserMentions(String userName);
 
 }

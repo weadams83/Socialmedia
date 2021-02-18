@@ -1,4 +1,4 @@
-package com.Assessment.SocialMedia.model;
+package com.Assessment.SocialMedia.DTOs;
 
 import java.sql.Timestamp;
 
@@ -9,10 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class TweetResponseDTO {
-
-	private Long id; 
-	private String Content; 
+public class TweetFeedResponseDTO {
 	private Timestamp posted;
-	
+	private String content;
+	private TweetRepostDTO repostOf;
 }

@@ -11,9 +11,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.Assessment.SocialMedia.model.TweedleUserRequestDTO;
-import com.Assessment.SocialMedia.model.TweedleUserResponseDTO;
-import com.Assessment.SocialMedia.model.TweetFeedResponseDTO;
+import com.Assessment.SocialMedia.DTOs.TweedleUserRequestDTO;
+import com.Assessment.SocialMedia.DTOs.TweedleUserResponseDTO;
+import com.Assessment.SocialMedia.DTOs.TweetFeedResponseDTO;
+import com.Assessment.SocialMedia.DTOs.TweetResponseDTO;
 import com.Assessment.SocialMedia.services.TweedleUserService;
 import lombok.AllArgsConstructor;
 
@@ -45,6 +46,12 @@ public class TweedleUserController {
 	@ResponseStatus(HttpStatus.FOUND)
 	public List<TweetFeedResponseDTO> getUserTweets(@PathVariable("username") String userName) {
 		return userServ.getUserTweets(userName);
+	}
+	
+	@RequestMapping(value = "/@{username}/mentions", method = RequestMethod.GET)
+	@ResponseStatus(HttpStatus.FOUND)
+	public List<TweetResponseDTO> getUserMentions(@PathVariable("username") String userName) {
+		return userServ.getUserMentions(userName);
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)

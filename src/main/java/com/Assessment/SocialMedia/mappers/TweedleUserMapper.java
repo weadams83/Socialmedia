@@ -4,10 +4,10 @@ import java.util.List;
 
 import org.mapstruct.Mapper;
 
+import com.Assessment.SocialMedia.DTOs.TweedleUserDTO;
+import com.Assessment.SocialMedia.DTOs.TweedleUserRequestDTO;
+import com.Assessment.SocialMedia.DTOs.TweedleUserResponseDTO;
 import com.Assessment.SocialMedia.entities.TweedleUser;
-import com.Assessment.SocialMedia.model.TweedleUserDTO;
-import com.Assessment.SocialMedia.model.TweedleUserRequestDTO;
-import com.Assessment.SocialMedia.model.TweedleUserResponseDTO;
 
 @Mapper(componentModel = "spring")
 public interface TweedleUserMapper {

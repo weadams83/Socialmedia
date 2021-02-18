@@ -18,11 +18,11 @@ public interface TweetRepository  extends JpaRepository<Tweet,Long>{
 			+ " Inner Join Tweet as w on w.author_id = f.followed_by"
 			+ " WHERE t.author_id = :author_id AND t.deleted=false And w.deleted=false) Or t.author_id=:author_id Order By t.posted Desc",
             nativeQuery = true)
-	Optional<List<Tweet>> getTweetFeed(@Param("author_id") Long author_id);
+	List<Tweet> getTweetFeed(@Param("author_id") Long author_id);
 	
 	@Query(value = " Select * from Tweet t Where t.author_id = :author_id AND t.deleted = false Order By t.posted DESC",
             nativeQuery = true)
-	Optional<List<Tweet>> getMyTweets(@Param("author_id") Long author_id);
+	List<Tweet> getMyTweets(@Param("author_id") Long author_id);
 
 
 	Optional<List<Tweet>> queryByDeletedFalse();
@@ -31,7 +31,10 @@ public interface TweetRepository  extends JpaRepository<Tweet,Long>{
             nativeQuery = true)
 	Optional<List<Tweet>> getAllTweets();
 
-
+	@Query(value = "Select * from Tweet t Where t.id In (Select m.mentions FROM mentioned_users m Where mentioned = :author_id) "
+			+ "And t.deleted = false Order by t.posted Desc",
+            nativeQuery = true)
+	List<Tweet> getMyMentions(@Param("author_id") Long author_id);
 
 
 }

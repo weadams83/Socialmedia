@@ -1,4 +1,4 @@
-package com.Assessment.SocialMedia.model;
+package com.Assessment.SocialMedia.DTOs;
 
 import java.sql.Timestamp;
 
