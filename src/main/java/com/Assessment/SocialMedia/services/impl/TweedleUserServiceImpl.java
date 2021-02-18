@@ -138,6 +138,29 @@ public class TweedleUserServiceImpl implements TweedleUserService{
 		tUserRepo.saveAndFlush(findCelebrity.get());
 	}
 	
+	@Override
+	public void postUserUnfollow(String username, TweedleUserRequestDTO tUserRequestDTO) {
+		VetTweedleUserRequestDTO(tUserRequestDTO);
+		Optional<TweedleUser> findUser = tUserRepo.findByCredentialsUserNameIgnoreCase(tUserRequestDTO.getCredentials().getUserName());
+		if(findUser.isEmpty()) {
+			throw new BadRequestException(String.format("You can't unfollow anyone, your username %s doesn't exist.", tUserRequestDTO.getCredentials().getUserName()));
+		}
+		Optional<TweedleUser> findCelebrity = tUserRepo.findByCredentialsUserNameIgnoreCase(username);
+		if(findCelebrity.isEmpty()) {
+			throw new BadRequestException(String.format("Can't unfollow %s, username doesn't exist.", username));
+		}
+		if(findCelebrity.get().isDeleted()) {
+			throw new BadRequestException(String.format("Can't unfollow %s, username has been deleted.", username));
+		}
+		if(!findCelebrity.get().getFollowedBy().contains(findUser.get())) {
+			throw new BadRequestException(String.format("You are already unfollowing this person."));
+		}
+		List<TweedleUser> getFans = findCelebrity.get().getFollowedBy();
+		getFans.remove(findUser.get());
+		findCelebrity.get().setFollowedBy(getFans);
+		tUserRepo.saveAndFlush(findCelebrity.get());
+	}
+	
 	private void VetTweedleUserRequestDTO(TweedleUserRequestDTO tUserRequestDTO) {
 		if(tUserRequestDTO.getCredentials().getPassword() == null || tUserRequestDTO.getCredentials().getPassword().length() == 0) {
 			throw new BadRequestException("User must have a Password.");
@@ -146,4 +169,6 @@ public class TweedleUserServiceImpl implements TweedleUserService{
 			throw new BadRequestException("User must have a Username.");
 		}
 	}
+
+	
 }

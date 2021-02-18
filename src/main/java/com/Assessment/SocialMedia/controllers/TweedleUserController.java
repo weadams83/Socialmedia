@@ -46,6 +46,12 @@ public class TweedleUserController {
 		userServ.postUserFollow(username,tUserRequestDTO);
 	}
 	
+	@RequestMapping(value = "/@{username}/unfollow", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public void postUserUnfollow(@PathVariable("username") String username,@RequestBody TweedleUserRequestDTO tUserRequestDTO) {
+		userServ.postUserUnfollow(username,tUserRequestDTO);
+	}
+	
 	@RequestMapping(value = "/@{username}", method = RequestMethod.PATCH)
 	@ResponseStatus(HttpStatus.ACCEPTED)
 	public TweedleUserResponseDTO patchUser(@PathVariable("username") String userName, @RequestBody TweedleUserRequestDTO tUserRequestDTO) {
