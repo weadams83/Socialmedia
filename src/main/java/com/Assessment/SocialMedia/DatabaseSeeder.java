@@ -104,7 +104,10 @@ public class DatabaseSeeder  implements CommandLineRunner{
 //		hashTag3.setTweets(eowynTweets);
 //		hashTagRepo.saveAndFlush(hashTag3);
 //		tweetRepo.saveAndFlush(tweet2);
-//		
+//		List<TweedleUser> fans = new ArrayList<>();
+//		fans.add(arwen);
+//		eowyn.setFollowedBy(fans);
+//		userRepo.saveAndFlush(eowyn);
 ////----------------------------------------------------------------------------------------------------------------//
 //		TweedleUser gimli = new TweedleUser();
 //		profile.setEmail("gimli@gmail.com");
@@ -140,6 +143,7 @@ public class DatabaseSeeder  implements CommandLineRunner{
 //
 //		hashTagRepo.saveAndFlush(hashTag4);
 //		tweetRepo.saveAndFlush(tweet3);
+//		
 ////----------------------------------------------------------------------------------------------------------------//
 //		TweedleUser legolas= new TweedleUser();
 //		profile.setEmail("legolas@protonmail.com");
@@ -158,6 +162,15 @@ public class DatabaseSeeder  implements CommandLineRunner{
 //			
 //		userRepo.saveAndFlush(legolas);
 //		tweetRepo.saveAndFlush(tweet4);
+//		
+//		fans.clear();
+//		fans.add(gimli);
+//		legolas.setFollowedBy(fans);
+//		userRepo.saveAndFlush(legolas);
+//		fans.clear();
+//		fans.add(legolas);
+//		gimli.setFollowedBy(fans);
+//		userRepo.saveAndFlush(gimli);
 	}
 
 }

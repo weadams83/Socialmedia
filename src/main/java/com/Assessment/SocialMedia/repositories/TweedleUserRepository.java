@@ -9,7 +9,7 @@ import com.Assessment.SocialMedia.entities.TweedleUser;
 
 @Repository
 public interface TweedleUserRepository extends JpaRepository<TweedleUser,Long>{
-	
+
 	Optional<List<TweedleUser>> queryByDeletedFalse();
 	
 	Optional<TweedleUser> findByCredentialsUserNameIgnoreCase(String username);

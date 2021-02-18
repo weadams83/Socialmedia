@@ -17,4 +17,6 @@ public interface TweedleUserService {
 
 	TweedleUserResponseDTO deleteUser(String userName, TweedleUserRequestDTO tUserRequestDTO);
 
+	void postUserFollow(String username, TweedleUserRequestDTO tUserRequestDTO);
+
 }

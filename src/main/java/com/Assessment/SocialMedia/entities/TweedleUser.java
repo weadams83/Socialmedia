@@ -9,6 +9,10 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
@@ -34,6 +38,18 @@ public class TweedleUser {
 
 	@OneToMany(mappedBy = "author")
 	private List<Tweet> tweets;													//tweets
+		
+	@ManyToMany(mappedBy = "followedBy")
+	private List<TweedleUser> iFollow;
+	
+	@ManyToMany
+	@JoinTable(name = "iFollowFollowedBy",
+			joinColumns = @JoinColumn(name = "followedBy"),
+			inverseJoinColumns = @JoinColumn(name = "iFollow"))
+	private List<TweedleUser> followedBy;
+	
+	@ManyToMany(mappedBy="mentions")
+	private List<Tweet> mentioned;
 	
 	/* Add embedded classes here */
 	@Embedded
@@ -41,6 +57,7 @@ public class TweedleUser {
 	@Embedded
 	private UserCredentials credentials;										//credentials
 	/* End Embedded */
+	
 	
 	
 	
