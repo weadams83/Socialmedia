@@ -28,8 +28,9 @@ public class DatabaseSeeder  implements CommandLineRunner{
 	
 	@Override
 	public void run(String... args) throws Exception {
-		//Uncomment to seed database, don't forget to modify application.properties (create-drop or update)
+//		Uncomment to seed database, don't forget to modify application.properties (create-drop or update)
 //----------------------------------------------------------------------------------------------------------------//
+
 //		TweedleUser arwen = new TweedleUser();
 //		Profile profile = new Profile();
 //		profile.setEmail("arwen@gmail.com");
@@ -171,6 +172,7 @@ public class DatabaseSeeder  implements CommandLineRunner{
 //		fans.add(legolas);
 //		gimli.setFollowedBy(fans);
 //		userRepo.saveAndFlush(gimli);
+
 	}
 
 }

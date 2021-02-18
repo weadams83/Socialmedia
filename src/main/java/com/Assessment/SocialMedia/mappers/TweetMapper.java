@@ -1,15 +1,24 @@
 package com.Assessment.SocialMedia.mappers;
 
+
+import java.util.ArrayList;
+import java.util.Collections;
+
 import java.util.List;
 
 import org.mapstruct.Mapper;
 
+import com.Assessment.SocialMedia.entities.TweedleUser;
 import com.Assessment.SocialMedia.entities.Tweet;
-import com.Assessment.SocialMedia.model.TweetFeedResponseDTO;
+import com.Assessment.SocialMedia.model.TweedleUserDTO;
+import com.Assessment.SocialMedia.model.TweetResponseDTO;
 
 @Mapper(componentModel = "spring")
 public interface TweetMapper {
-	TweetFeedResponseDTO entityToDTO(Tweet tweet);
-	List<TweetFeedResponseDTO> entitiesToDTOs(List<Tweet> tweets);
+
+
+	List<TweetResponseDTO> entitiesToResponseDTOs(List<Tweet> findAll);
+
+
 
 }

@@ -11,6 +11,7 @@ import com.Assessment.SocialMedia.model.TweedleUserResponseDTO;
 
 @Mapper(componentModel = "spring")
 public interface TweedleUserMapper {
+	
 	TweedleUser DTOtoEntity(TweedleUserDTO tweedleUserDTO);
 	
 	List<TweedleUserResponseDTO> entitiesToResponseDTOs(List<TweedleUser> tUsers);
