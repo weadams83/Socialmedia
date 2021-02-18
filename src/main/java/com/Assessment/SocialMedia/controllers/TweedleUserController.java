@@ -41,6 +41,12 @@ public class TweedleUserController {
 		return userServ.getUserFeed(userName);
 	}
 	
+	@RequestMapping(value = "/@{username}/tweets", method = RequestMethod.GET)
+	@ResponseStatus(HttpStatus.FOUND)
+	public List<TweetFeedResponseDTO> getUserTweets(@PathVariable("username") String userName) {
+		return userServ.getUserTweets(userName);
+	}
+	
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	public TweedleUserResponseDTO postUser(@RequestBody TweedleUserRequestDTO tUserRequestDTO) {

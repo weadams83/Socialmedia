@@ -12,6 +12,5 @@ import lombok.NoArgsConstructor;
 public class TweetFeedResponseDTO {
 	private Timestamp posted;
 	private String content;
-	
 	private TweetRepostDTO repostOf;
 }
