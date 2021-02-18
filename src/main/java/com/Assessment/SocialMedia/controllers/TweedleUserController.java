@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.Assessment.SocialMedia.model.TweedleUserRequestDTO;
 import com.Assessment.SocialMedia.model.TweedleUserResponseDTO;
+import com.Assessment.SocialMedia.model.TweetFeedResponseDTO;
 import com.Assessment.SocialMedia.services.TweedleUserService;
 import lombok.AllArgsConstructor;
 
@@ -32,6 +33,12 @@ public class TweedleUserController {
 	@ResponseStatus(HttpStatus.FOUND)
 	public TweedleUserResponseDTO getUser(@PathVariable("username") String userName) {
 		return userServ.getUser(userName);
+	}
+	
+	@RequestMapping(value = "/@{username}/feed", method = RequestMethod.GET)
+	@ResponseStatus(HttpStatus.FOUND)
+	public List<TweetFeedResponseDTO> getUserFeed(@PathVariable("username") String userName) {
+		return userServ.getUserFeed(userName);
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
