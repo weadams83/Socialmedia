@@ -1,4 +1,6 @@
-package com.Assessment.SocialMedia.model;
+package com.Assessment.SocialMedia.DTOs;
+
+
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,6 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class ErrorDTO {
-	private String message;
+public class HashTagResponseDTO {
+
+	private Long id;
+	private String label; 
 }

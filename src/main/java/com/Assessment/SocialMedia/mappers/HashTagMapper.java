@@ -3,8 +3,9 @@ package com.Assessment.SocialMedia.mappers;
 import java.util.List;
 
 import org.mapstruct.Mapper;
+
+import com.Assessment.SocialMedia.DTOs.HashTagResponseDTO;
 import com.Assessment.SocialMedia.entities.HashTag;
-import com.Assessment.SocialMedia.model.HashTagResponseDTO;
 
 
 @Mapper(componentModel = "spring")

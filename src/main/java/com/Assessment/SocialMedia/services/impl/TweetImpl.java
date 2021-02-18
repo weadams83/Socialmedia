@@ -5,9 +5,9 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.Assessment.SocialMedia.DTOs.TweetResponseDTO;
 import com.Assessment.SocialMedia.entities.Tweet;
 import com.Assessment.SocialMedia.mappers.TweetMapper;
-import com.Assessment.SocialMedia.model.TweetResponseDTO;
 import com.Assessment.SocialMedia.repositories.TweetRepository;
 import com.Assessment.SocialMedia.services.TweetService;
 
