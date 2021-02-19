@@ -57,8 +57,8 @@ public class TweetController {
 	}
 
 	@PostMapping
-	public TweetResponseDTO createTweet(@RequestBody TweetResponseDTO tweetResponseDTO) {
-		return tweetService.createTweet(tweetResponseDTO);
+	public TweetResponseDTO postTweet(@RequestBody PostTweetDTO postTweetDTO) {
+		return tweetService.postTweet(postTweetDTO);
 	}
 
 	@GetMapping("/{id}/likes")

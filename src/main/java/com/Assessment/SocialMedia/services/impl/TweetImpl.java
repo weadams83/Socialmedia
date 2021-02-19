@@ -35,36 +35,36 @@ public class TweetImpl implements TweetService {
 	private TweetRepository tweetRepository;
 	private TweetMapper tweetMapper;
 	private HashTagRepository hTagRepo;
-	
-	//utility function find hashtags
-	public List<String> findHashTagContent(String content){
+
+	// utility function find hashtags
+	public List<String> findHashTagContent(String content) {
 		List<String> retList = new ArrayList<>();
 		Pattern pattern = Pattern.compile("#\\S+");
 		Matcher matcher = pattern.matcher(content);
-		while(matcher.find()) {
+		while (matcher.find()) {
 			retList.add(matcher.group());
 		}
 		return retList;
 	}
-	
-	//utility function find mentions
-	public List<String> findMentions(String content){
+
+	// utility function find mentions
+	public List<String> findMentions(String content) {
 		List<String> retList = new ArrayList<>();
 		Pattern pattern = Pattern.compile("@\\S+");
 		Matcher matcher = pattern.matcher(content);
-		while(matcher.find()) {
+		while (matcher.find()) {
 			retList.add(matcher.group());
 		}
 		return retList;
 	}
-	
+
 	public void findSetHashTags(Tweet tweet) {
 		List<String> hTags = findHashTagContent(tweet.getContent());
 		Optional<HashTag> findTag = Optional.of(new HashTag());
 		List<Tweet> tempTweetList = new ArrayList<Tweet>();
-		for(String eachTag:hTags) {
+		for (String eachTag : hTags) {
 			findTag = hTagRepo.findByLabelIgnoreCase(eachTag);
-			if(findTag.isEmpty()) {
+			if (findTag.isEmpty()) {
 				HashTag newTag = new HashTag();
 				tempTweetList = new ArrayList<>();
 				tempTweetList.add(tweet);
@@ -72,7 +72,7 @@ public class TweetImpl implements TweetService {
 				newTag.setLastUsed(new Timestamp(System.currentTimeMillis()));
 				newTag.setTweets(tempTweetList);
 				hTagRepo.save(newTag);
-			}else {
+			} else {
 				tempTweetList = findTag.get().getTweets();
 				tempTweetList.add(tweet);
 				findTag.get().setLastUsed(new Timestamp(System.currentTimeMillis()));
@@ -81,21 +81,21 @@ public class TweetImpl implements TweetService {
 			}
 		}
 	}
-	
+
 	public void findSetMentions(Tweet tweet) {
 		List<String> mentions = findMentions(tweet.getContent());
 		List<TweedleUser> mentioned = new ArrayList<>();
 		Optional<TweedleUser> findUser = Optional.of(new TweedleUser());
-		for(String eachMention: mentions) {
+		for (String eachMention : mentions) {
 			findUser = tUserRepo.findByCredentialsUserNameIgnoreCase(eachMention);
-			if(findUser.isPresent()) {
+			if (findUser.isPresent()) {
 				mentioned.add(findUser.get());
 			}
 		}
 		tweet.setMentions(mentioned);
 		tweetRepository.saveAndFlush(tweet);
 	}
-	
+
 	@Override
 	public List<TweetResponseDTO> getAllTweets() {
 
@@ -164,57 +164,73 @@ public class TweetImpl implements TweetService {
 		}
 	}
 
-
 	@Override
-	public TweetResponseDTO createTweet(TweetResponseDTO tweetResponseDTO) {
-		// Map requestdto to a tweet entity (not save in database yet, just an java
-		// object)
-		TweetResponseDTO tweetToSave = new TweetResponseDTO();
-//		tweetToSave.s
+	public TweetResponseDTO postTweet(PostTweetDTO postTweetDTO) {
+		Optional<TweedleUser> findUser = tUserRepo
+				.findByCredentialsUserNameIgnoreCase(postTweetDTO.getCredentials().getUserName());
 
-		// Save the new tweet entity and store the resulting entity with the ID
-		// generated from the database
-		// tweetrepository accesses the database then-
-		// the save and flush will return the data with the newly generated id
-//		Tweet savedTweet = tweetRepository.saveAndFlush(tweetToSave);
-
-		// map my newly saved entity with the generated id to a response dto and (What
-		// we return to client)
-//		TweetResponseDTO result = new TweetResponseDTO(savedTweet.getId(), savedTweet);
-//		result.setId(savedTweet.getId());
-		return null;
+		if (findUser.isEmpty()) {
+			throw new NotFoundException("User could not be found.");
+		}
+		if (findUser.get().isDeleted()) {
+			throw new NotFoundException("User has been deleted");
+		}
+		
+		Tweet newTweet = new Tweet();
+		newTweet.setContent(postTweetDTO.getContent());
+		newTweet.setAuthor(findUser.get());
+		findSetHashTags(newTweet);
+		findSetMentions(newTweet);
+		tweetRepository.saveAndFlush(newTweet);
+		return tweetMapper.entityToResponseDTO(newTweet);
 	}
+
+//	Creates a new simple tweet, with the author set to the user identified by
+//	the credentials in the request body. If the given credentials do not match an 
+//	active user in the database, an error should be sent in lieu of a response.
+//
+//	The response should contain the newly-created tweet.
+//
+//	Because this always creates a simple tweet, it must have a content property and 
+//	may not have inReplyTo or repostOf properties.
+//
+//	IMPORTANT: when a tweet with content is created, the server must process the 
+//	tweet's content for @{username} mentions and #{hashtag} tags. There is no way 
+//	to create hashtags or create mentions from the API, so this must be handled automatically!
+//	
+//	
 
 	@Override
 	public List<TweedleUserResponseDTO> getUsersLikedTweet(Long id) {
 
-		
-		 Optional<Tweet> findTweet = tweetRepository.findById(id);
-		 if (findTweet.isEmpty() || findTweet.get().isDeleted()) {
-				throw new NotFoundException("No such tweet exists or has been deleted.");
-			}
+		Optional<Tweet> findTweet = tweetRepository.findById(id);
+		if (findTweet.isEmpty() || findTweet.get().isDeleted()) {
+			throw new NotFoundException("No such tweet exists or has been deleted.");
+		}
 		List<TweedleUser> userLiked = tUserRepo.getAllLikes(id);
-		
+
 		return tUserMap.entitiesToResponseDTOs(userLiked);
 	}
 
 	@Override
 	public TweetResponseDTO postReply(Long id, PostTweetDTO postTweetDTO) {
 		Optional<Tweet> findTweet = tweetRepository.findById(id);
-		if(findTweet.isEmpty()) {
-			throw new NotFoundException(String.format("Tweet with id: %d doesn't exist.",id));
+		if (findTweet.isEmpty()) {
+			throw new NotFoundException(String.format("Tweet with id: %d doesn't exist.", id));
 		}
-		if(findTweet.get().isDeleted()) {
-			throw new NotFoundException(String.format("Tweet with id: %d has been deleted.",id));
+		if (findTweet.get().isDeleted()) {
+			throw new NotFoundException(String.format("Tweet with id: %d has been deleted.", id));
 		}
-		Optional<TweedleUser> findUser = tUserRepo.findByCredentialsUserNameIgnoreCase(postTweetDTO.getCredentials().getUserName());
-		if(findUser.isEmpty()) {
-			throw new NotFoundException(String.format("User with name: %s doesn't exist.",postTweetDTO.getCredentials().getUserName()));
+		Optional<TweedleUser> findUser = tUserRepo
+				.findByCredentialsUserNameIgnoreCase(postTweetDTO.getCredentials().getUserName());
+		if (findUser.isEmpty()) {
+			throw new NotFoundException(
+					String.format("User with name: %s doesn't exist.", postTweetDTO.getCredentials().getUserName()));
 		}
-		if(!findUser.get().getCredentials().getPassword().equals(postTweetDTO.getCredentials().getPassword())) {
+		if (!findUser.get().getCredentials().getPassword().equals(postTweetDTO.getCredentials().getPassword())) {
 			throw new BadRequestException("Wrond password.");
 		}
-		if(postTweetDTO.getContent() == null || postTweetDTO.getContent().length() == 0) {
+		if (postTweetDTO.getContent() == null || postTweetDTO.getContent().length() == 0) {
 			throw new BadRequestException("Your tweet must have content.");
 		}
 		Tweet newTweet = new Tweet();
@@ -227,9 +243,3 @@ public class TweetImpl implements TweetService {
 		return tweetMapper.entityToResponseDTO(newTweet);
 	}
 }
-
-//	Retrieves the active users who have liked the tweet with the given id.
-//	If that tweet is deleted or otherwise doesn't exist, 
-//	an error should be sent in lieu of a response.
-//
-//	IMPORTANT: Deleted users should be excluded from the response.

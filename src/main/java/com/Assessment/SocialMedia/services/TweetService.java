@@ -17,7 +17,7 @@ public interface TweetService {
 
 	TweetResponseDTO getTweetByID(Long id);
 
-	TweetResponseDTO createTweet(TweetResponseDTO tweetResponseDTO);
+	TweetResponseDTO postTweet(PostTweetDTO postTweetDTO);
 
 	List<TweedleUserResponseDTO> getUsersLikedTweet(Long id);
 
