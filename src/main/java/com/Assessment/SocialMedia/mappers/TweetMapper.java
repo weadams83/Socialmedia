@@ -21,6 +21,7 @@ public interface TweetMapper {
 	List<TweetResponseDTO> entitiesToResponseDTOs(List<Tweet> findAll);
 
 	List<TweetFeedResponseDTO> entitiesToDTOs(List<Tweet> list);
+	
 
 
 

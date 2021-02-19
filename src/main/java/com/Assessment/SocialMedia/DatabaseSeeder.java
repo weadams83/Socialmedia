@@ -142,7 +142,7 @@ public class DatabaseSeeder  implements CommandLineRunner{
 		List<HashTag> gimliHashTags = new ArrayList<HashTag>();
 		List<Tweet> gimliTweets = new ArrayList<Tweet>();
 		
-		gimliHashTags.add(hashTag3);
+		gimliHashTags.add(hashTag4);
 		userRepo.saveAndFlush(gimli);
 		tweetRepo.saveAndFlush(tweet3);
 		tweet3.setHashtags(gimliHashTags);

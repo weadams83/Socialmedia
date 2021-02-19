@@ -22,8 +22,8 @@ public class TweetImpl implements TweetService {
 	@Override
 	public List<TweetResponseDTO> getAllTweets() {
 
-		Optional<List<Tweet>> result = tweetRepository.getAllTweets();
-		return tweetMapper.entitiesToResponseDTOs(result.get());
+		List<Tweet> result = tweetRepository.getAllTweets();
+		return tweetMapper.entitiesToResponseDTOs(result);
 
 	}
 

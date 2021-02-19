@@ -21,7 +21,7 @@ public interface TweedleUserRepository extends JpaRepository<TweedleUser,Long>{
 			+ "Where f.followed_by = :author_id) And t.deleted=false", nativeQuery = true)
 	List<TweedleUser> getMyFollowers(@Param("author_id") Long author_id);
 
-	@Query(value = "	Select * From tweedle_user t Where t.id IN(Select f.followed_by from i_follow_followed_by f "
+	@Query(value = "Select * From tweedle_user t Where t.id IN(Select f.followed_by from i_follow_followed_by f "
 			+ "Where f.i_follow = :author_id) And t.deleted=false", nativeQuery = true)
 	List<TweedleUser> getWhoIFollow(@Param("author_id") Long author_id);	
 }
