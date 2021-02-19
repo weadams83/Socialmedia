@@ -7,14 +7,13 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.Assessment.SocialMedia.DTOs.TweedleUserRequestDTO;
-
+import com.Assessment.SocialMedia.DTOs.TweedleUserResponseDTO;
 import com.Assessment.SocialMedia.DTOs.TweetResponseDTO;
 import com.Assessment.SocialMedia.services.TweetService;
 
@@ -43,6 +42,22 @@ public class TweetController {
 	@ResponseStatus(HttpStatus.CREATED)
 	public void postLike(@PathVariable("id") Long id, @RequestBody TweedleUserRequestDTO tweedleUserRequestDTO) {
 		tweetService.postLike(id,tweedleUserRequestDTO);
+	}
+
+	@GetMapping("/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	public TweetResponseDTO getTweetByID(@PathVariable Long id) {
+		return tweetService.getTweetByID(id);
+	}
+
+	@PostMapping
+	public TweetResponseDTO createTweet(@RequestBody TweetResponseDTO tweetResponseDTO) {
+		return tweetService.createTweet(tweetResponseDTO);
+	}
+
+	@GetMapping("/{id}/likes")
+	public List<TweedleUserResponseDTO> getUsersLikedTweet(@PathVariable Long id) {
+		return tweetService.getUsersLikedTweet(id);
 	}
 
 }

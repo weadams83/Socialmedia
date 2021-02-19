@@ -7,16 +7,9 @@ import org.mapstruct.Mapper;
 import com.Assessment.SocialMedia.DTOs.HashTagResponseDTO;
 import com.Assessment.SocialMedia.entities.HashTag;
 
-
 @Mapper(componentModel = "spring")
 public interface HashTagMapper {
 
 	List<HashTagResponseDTO> entitiesToResponseDTOs(List<HashTag> findAll);
-	
-//	HashTag DTOtoEntity(HashTagDTO hashTagDTO);
-//	List<HashTagResponseDTO> entitiesToResponseDTOs(List<HashTag> hTag);
-//	HashTagResponseDTO entityToResponseDTO(HashTag hashTag);
-//	HashTag requestDTOtoEntity(HashTagRequestDTO hashTagRequestDTO);
-
 
 }
