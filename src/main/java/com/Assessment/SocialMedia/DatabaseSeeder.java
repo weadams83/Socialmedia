@@ -181,6 +181,23 @@ public class DatabaseSeeder  implements CommandLineRunner{
 		fans.add(legolas);
 		gimli.setFollowedBy(fans);
 		userRepo.saveAndFlush(gimli);
+//---------------------------------------------------------------------------------------------------------------------------------//
+		TweedleUser galadriel = new TweedleUser();
+		Profile galProfile = new Profile();
+		galProfile.setEmail("galadriel@greenwood.com");
+		galProfile.setFirstName("Galadriel");
+		galProfile.setLastName("Lady of Light");
+		galProfile.setPhone("743-589-3625");
+		UserCredentials galadrielPass = new UserCredentials();
+		galadrielPass.setUserName("Galadriel");
+		galadrielPass.setPassword("Celeborn");
+		galadriel.setCredentials(galadrielPass);
+		galadriel.setProfile(galProfile);
+		List<Tweet> likedTweets = new ArrayList<>();
+		likedTweets.add(tweet);
+		galadriel.setLikedTweets(likedTweets);
+
+		userRepo.saveAndFlush(galadriel);
 
 	}
 

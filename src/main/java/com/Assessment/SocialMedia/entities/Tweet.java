@@ -52,6 +52,9 @@ public class Tweet {
 	@OneToOne
 	private Tweet repostOf;
 	
+	@ManyToMany(mappedBy ="likedTweets")
+	private List<TweedleUser> likedBy;
+	
 	/* Hash Tags */
 	@ManyToMany
 	@JoinTable(name = "tweetHashJoin",
