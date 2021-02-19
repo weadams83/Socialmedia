@@ -51,6 +51,10 @@ public class TweedleUser {
 	@ManyToMany(mappedBy="mentions")
 	private List<Tweet> mentioned;
 	
+	@ManyToMany
+	@JoinTable
+	private List<Tweet> likedTweets;
+	
 	/* Add embedded classes here */
 	@Embedded
 	private Profile profile;													//profile

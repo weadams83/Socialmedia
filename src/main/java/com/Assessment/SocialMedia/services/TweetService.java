@@ -15,4 +15,6 @@ public interface TweetService {
 	
 	
 
+	void postLike(Long id, TweedleUserRequestDTO tweedleUserRequestDTO);
+
 }
