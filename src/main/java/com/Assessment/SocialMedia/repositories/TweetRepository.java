@@ -25,16 +25,19 @@ public interface TweetRepository  extends JpaRepository<Tweet,Long>{
 	List<Tweet> getMyTweets(@Param("author_id") Long author_id);
 
 
-	Optional<List<Tweet>> queryByDeletedFalse();
+	List<Tweet> queryByDeletedFalse();
 	
 	@Query(value = " Select * from Tweet t Where  t.deleted = false Order By t.posted DESC",
             nativeQuery = true)
-	Optional<List<Tweet>> getAllTweets();
+	List<Tweet> getAllTweets();
 
 	@Query(value = "Select * from Tweet t Where t.id In (Select m.mentions FROM mentioned_users m Where mentioned = :author_id) "
 			+ "And t.deleted = false Order by t.posted Desc",
             nativeQuery = true)
 	List<Tweet> getMyMentions(@Param("author_id") Long author_id);
 
+	@Query(value = "Select * from tweet t where t.id in (Select j.tweet_id from tweet_hash_join j Inner Join hash_tag h ON h.id = j.hash_tag_id Where h.label = :hTag)"
+			+ "	And t.deleted = false Order by t.posted DESC", nativeQuery = true)
+	List<Tweet> getTweetsTagged(@Param("hTag") String hTag);
 
 }
