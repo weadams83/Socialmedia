@@ -1,18 +1,26 @@
 package com.Assessment.SocialMedia.services.impl;
 
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.springframework.stereotype.Service;
 
+import com.Assessment.SocialMedia.DTOs.PostTweetDTO;
 import com.Assessment.SocialMedia.DTOs.TweedleUserRequestDTO;
 import com.Assessment.SocialMedia.DTOs.TweedleUserResponseDTO;
 import com.Assessment.SocialMedia.DTOs.TweetResponseDTO;
+import com.Assessment.SocialMedia.entities.HashTag;
 import com.Assessment.SocialMedia.entities.TweedleUser;
 import com.Assessment.SocialMedia.entities.Tweet;
 import com.Assessment.SocialMedia.exceptions.BadRequestException;
 import com.Assessment.SocialMedia.exceptions.NotFoundException;
+import com.Assessment.SocialMedia.mappers.TweedleUserMapper;
 import com.Assessment.SocialMedia.mappers.TweetMapper;
+import com.Assessment.SocialMedia.repositories.HashTagRepository;
 import com.Assessment.SocialMedia.repositories.TweedleUserRepository;
 import com.Assessment.SocialMedia.repositories.TweetRepository;
 import com.Assessment.SocialMedia.services.TweetService;
@@ -25,7 +33,68 @@ public class TweetImpl implements TweetService {
 	private TweedleUserRepository tUserRepo;
 	private TweetRepository tweetRepository;
 	private TweetMapper tweetMapper;
-
+	private HashTagRepository hTagRepo;
+	
+	//utility function find hashtags
+	public List<String> findHashTagContent(String content){
+		List<String> retList = new ArrayList<>();
+		Pattern pattern = Pattern.compile("#\\S+");
+		Matcher matcher = pattern.matcher(content);
+		while(matcher.find()) {
+			retList.add(matcher.group());
+		}
+		return retList;
+	}
+	
+	//utility function find mentions
+	public List<String> findMentions(String content){
+		List<String> retList = new ArrayList<>();
+		Pattern pattern = Pattern.compile("@\\S+");
+		Matcher matcher = pattern.matcher(content);
+		while(matcher.find()) {
+			retList.add(matcher.group());
+		}
+		return retList;
+	}
+	
+	public void findSetHashTags(Tweet tweet) {
+		List<String> hTags = findHashTagContent(tweet.getContent());
+		Optional<HashTag> findTag = Optional.of(new HashTag());
+		List<Tweet> tempTweetList = new ArrayList<Tweet>();
+		for(String eachTag:hTags) {
+			findTag = hTagRepo.findByLabelIgnoreCase(eachTag);
+			if(findTag.isEmpty()) {
+				HashTag newTag = new HashTag();
+				tempTweetList = new ArrayList<>();
+				tempTweetList.add(tweet);
+				newTag.setLabel(eachTag);
+				newTag.setLastUsed(new Timestamp(System.currentTimeMillis()));
+				newTag.setTweets(tempTweetList);
+				hTagRepo.save(newTag);
+			}else {
+				tempTweetList = findTag.get().getTweets();
+				tempTweetList.add(tweet);
+				findTag.get().setLastUsed(new Timestamp(System.currentTimeMillis()));
+				findTag.get().setTweets(tempTweetList);
+				hTagRepo.save(findTag.get());
+			}
+		}
+	}
+	
+	public void findSetMentions(Tweet tweet) {
+		List<String> mentions = findMentions(tweet.getContent());
+		List<TweedleUser> mentioned = new ArrayList<>();
+		Optional<TweedleUser> findUser = Optional.of(new TweedleUser());
+		for(String eachMention: mentions) {
+			findUser = tUserRepo.findByCredentialsUserNameIgnoreCase(eachMention);
+			if(findUser.isPresent()) {
+				mentioned.add(findUser.get());
+			}
+		}
+		tweet.setMentions(mentioned);
+		tweetRepository.saveAndFlush(tweet);
+	}
+	
 	@Override
 	public List<TweetResponseDTO> getAllTweets() {
 
@@ -90,7 +159,6 @@ public class TweetImpl implements TweetService {
 		}
 	}
 
-
 	public TweetResponseDTO createTweet(TweetResponseDTO tweetResponseDTO) {
 		// TODO Auto-generated method stub
 		return null;
@@ -137,6 +205,34 @@ public class TweetImpl implements TweetService {
 ////
 ////	IMPORTANT: Deleted users should be excluded from the response.
 
+	@Override
+	public TweetResponseDTO postReply(Long id, PostTweetDTO postTweetDTO) {
+		Optional<Tweet> findTweet = tweetRepository.findById(id);
+		if(findTweet.isEmpty()) {
+			throw new NotFoundException(String.format("Tweet with id: %d doesn't exist.",id));
+		}
+		if(findTweet.get().isDeleted()) {
+			throw new NotFoundException(String.format("Tweet with id: %d has been deleted.",id));
+		}
+		Optional<TweedleUser> findUser = tUserRepo.findByCredentialsUserNameIgnoreCase(postTweetDTO.getCredentials().getUserName());
+		if(findUser.isEmpty()) {
+			throw new NotFoundException(String.format("User with name: %s doesn't exist.",postTweetDTO.getCredentials().getUserName()));
+		}
+		if(!findUser.get().getCredentials().getPassword().equals(postTweetDTO.getCredentials().getPassword())) {
+			throw new BadRequestException("Wrond password.");
+		}
+		if(postTweetDTO.getContent() == null || postTweetDTO.getContent().length() == 0) {
+			throw new BadRequestException("Your tweet must have content.");
+		}
+		Tweet newTweet = new Tweet();
+		newTweet.setContent(postTweetDTO.getContent());
+		newTweet.setInReplyTo(findTweet.get());
+		newTweet.setAuthor(findUser.get());
+		findSetHashTags(newTweet);
+		findSetMentions(newTweet);
+		tweetRepository.saveAndFlush(newTweet);
+		return tweetMapper.entityToResponseDTO(newTweet);
+	}
 }
 	
 	
