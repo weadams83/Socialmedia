@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
+import com.Assessment.SocialMedia.DTOs.PostTweetDTO;
 import com.Assessment.SocialMedia.DTOs.TweedleUserRequestDTO;
 import com.Assessment.SocialMedia.DTOs.TweedleUserResponseDTO;
 import com.Assessment.SocialMedia.DTOs.TweetResponseDTO;
@@ -42,6 +42,12 @@ public class TweetController {
 	@ResponseStatus(HttpStatus.CREATED)
 	public void postLike(@PathVariable("id") Long id, @RequestBody TweedleUserRequestDTO tweedleUserRequestDTO) {
 		tweetService.postLike(id,tweedleUserRequestDTO);
+	}
+	
+	@PostMapping("/{id}/reply")
+	@ResponseStatus(HttpStatus.CREATED)
+	public TweetResponseDTO postReply(@PathVariable("id") Long id, @RequestBody PostTweetDTO postTweetDTO) {
+		return tweetService.postReply(id,postTweetDTO);
 	}
 
 	@GetMapping("/{id}")
