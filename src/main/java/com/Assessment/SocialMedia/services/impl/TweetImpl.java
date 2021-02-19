@@ -31,6 +31,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class TweetImpl implements TweetService {
 	private TweedleUserRepository tUserRepo;
+	private TweedleUserMapper tUserMap;
 	private TweetRepository tweetRepository;
 	private TweetMapper tweetMapper;
 	private HashTagRepository hTagRepo;
@@ -99,7 +100,7 @@ public class TweetImpl implements TweetService {
 	public List<TweetResponseDTO> getAllTweets() {
 
 		List<Tweet> result = tweetRepository.getAllTweets();
-		return tweetMapper.entitiesToResponseDTOs(result);	
+		return tweetMapper.entitiesToResponseDTOs(result);
 	}
 
 	@Override
@@ -116,94 +117,86 @@ public class TweetImpl implements TweetService {
 	}
 
 	@Override
-	public TweetResponseDTO deleteTweet(Long id, TweedleUserRequestDTO tweetUserRequestDTO){
-		Optional<Tweet>findTweet = tweetRepository.findById(id);
+	public TweetResponseDTO deleteTweet(Long id, TweedleUserRequestDTO tweetUserRequestDTO) {
+		Optional<Tweet> findTweet = tweetRepository.findById(id);
 		if (findTweet.isEmpty()) {
 			throw new NotFoundException(String.format("Tweet With id: %d does not exsist", id));
 		}
-		if (!findTweet.get().getAuthor().getCredentials().getUserName().equals(tweetUserRequestDTO.getCredentials().getUserName())) {
+		if (!findTweet.get().getAuthor().getCredentials().getUserName()
+				.equals(tweetUserRequestDTO.getCredentials().getUserName())) {
 			throw new BadRequestException("Username Incorrect");
 		}
-		if (!findTweet.get().getAuthor().getCredentials().getPassword().equals(tweetUserRequestDTO.getCredentials().getPassword())) {
+		if (!findTweet.get().getAuthor().getCredentials().getPassword()
+				.equals(tweetUserRequestDTO.getCredentials().getPassword())) {
 			throw new BadRequestException("Password Incorrect");
 		}
 		findTweet.get().setDeleted(true);
 		tweetRepository.saveAndFlush(findTweet.get());
 		return tweetMapper.entityToResponseDTO(findTweet.get());
 	}
-	
+
 	public void postLike(Long id, TweedleUserRequestDTO tweedleUserRequestDTO) {
 		Optional<Tweet> findTweet = tweetRepository.findById(id);
-		if(findTweet.isEmpty()) {
-			throw new NotFoundException(String.format("Tweet with id: %d does not exist.",id));
+		if (findTweet.isEmpty()) {
+			throw new NotFoundException(String.format("Tweet with id: %d does not exist.", id));
 		}
-		if(findTweet.get().isDeleted()) {
-			throw new NotFoundException(String.format("Tweet with id: %d has been deleted.",id));
+		if (findTweet.get().isDeleted()) {
+			throw new NotFoundException(String.format("Tweet with id: %d has been deleted.", id));
 		}
-		Optional<TweedleUser> findUser = tUserRepo.findByCredentialsUserNameIgnoreCase(tweedleUserRequestDTO.getCredentials().getUserName());
-		
-		if(findUser.isEmpty()) {
+		Optional<TweedleUser> findUser = tUserRepo
+				.findByCredentialsUserNameIgnoreCase(tweedleUserRequestDTO.getCredentials().getUserName());
+
+		if (findUser.isEmpty()) {
 			throw new NotFoundException("User could not be found.");
 		}
-		if(!findUser.get().getCredentials().getPassword().equals(tweedleUserRequestDTO.getCredentials().getPassword())) {
+		if (!findUser.get().getCredentials().getPassword()
+				.equals(tweedleUserRequestDTO.getCredentials().getPassword())) {
 			throw new BadRequestException("Password is incorrect.");
 		}
-		if(findUser.get().isDeleted()) {
+		if (findUser.get().isDeleted()) {
 			throw new NotFoundException("User has been deleted");
 		}
 		List<Tweet> likedTweets = findUser.get().getLikedTweets();
-		if(!likedTweets.contains(findTweet.get())) {
+		if (!likedTweets.contains(findTweet.get())) {
 			likedTweets.add(findTweet.get());
 			findUser.get().setLikedTweets(likedTweets);
 			tUserRepo.saveAndFlush(findUser.get());
 		}
 	}
 
+
+	@Override
 	public TweetResponseDTO createTweet(TweetResponseDTO tweetResponseDTO) {
-		// TODO Auto-generated method stub
+		// Map requestdto to a tweet entity (not save in database yet, just an java
+		// object)
+		TweetResponseDTO tweetToSave = new TweetResponseDTO();
+//		tweetToSave.s
+
+		// Save the new tweet entity and store the resulting entity with the ID
+		// generated from the database
+		// tweetrepository accesses the database then-
+		// the save and flush will return the data with the newly generated id
+//		Tweet savedTweet = tweetRepository.saveAndFlush(tweetToSave);
+
+		// map my newly saved entity with the generated id to a response dto and (What
+		// we return to client)
+//		TweetResponseDTO result = new TweetResponseDTO(savedTweet.getId(), savedTweet);
+//		result.setId(savedTweet.getId());
 		return null;
 	}
 
 	@Override
 	public List<TweedleUserResponseDTO> getUsersLikedTweet(Long id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
-//	@Override
-//	public TweetResponseDTO createTweet(TweetResponseDTO tweetResponseDTO) {
-//		//Map requestdto to a tweet entity (not save in database yet, just an java object)
-//		TweetResponseDTO tweetToSave =  new TweetResponseDTO(); 
-////		tweetToSave.s
-//		
-//		//Save the new tweet entity and store the resulting entity with the ID generated from the database
-//		//tweetrepository accesses the database then- 
-//		//the save and flush will return the data with the newly generated id
-////		Tweet savedTweet = tweetRepository.saveAndFlush(tweetToSave);
-//		
-//		//map my newly saved entity with the generated id to a response dto and (What we return to client)
-////		TweetResponseDTO result = new TweetResponseDTO(savedTweet.getId(), savedTweet);
-////		result.setId(savedTweet.getId());
-//		return null; 	
-//	}
-//
-//	@Override
-//	public List<TweedleUserResponseDTO> getUsersLikedTweet(Long id) {
-//		Optional<Tweet> tweet = tweetRepository.findById(id);
-//		//Optional<Tweet> findId = tweetRepository.findBy
-//		
-//		if (tweet.isEmpty() || tweet.get().isDeleted()) {
-//			throw new NotFoundException("No such tweet exists or has been deleted.");
-//		}
-//		return tweetMapper.entityToResponseDTO(tweet.get());
-//	}
-//}
-//
-////	Retrieves the active users who have liked the tweet with the given id.
-////	If that tweet is deleted or otherwise doesn't exist, 
-////	an error should be sent in lieu of a response.
-////
-////	IMPORTANT: Deleted users should be excluded from the response.
+		
+		 Optional<Tweet> findTweet = tweetRepository.findById(id);
+		 if (findTweet.isEmpty() || findTweet.get().isDeleted()) {
+				throw new NotFoundException("No such tweet exists or has been deleted.");
+			}
+		List<TweedleUser> userLiked = tUserRepo.getAllLikes(id);
+		
+		return tUserMap.entitiesToResponseDTOs(userLiked);
+	}
 
 	@Override
 	public TweetResponseDTO postReply(Long id, PostTweetDTO postTweetDTO) {
@@ -234,12 +227,9 @@ public class TweetImpl implements TweetService {
 		return tweetMapper.entityToResponseDTO(newTweet);
 	}
 }
-	
-	
-	
-	
-	
-	
-	
-	
 
+//	Retrieves the active users who have liked the tweet with the given id.
+//	If that tweet is deleted or otherwise doesn't exist, 
+//	an error should be sent in lieu of a response.
+//
+//	IMPORTANT: Deleted users should be excluded from the response.

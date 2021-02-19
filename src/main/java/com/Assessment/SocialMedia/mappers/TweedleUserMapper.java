@@ -12,14 +12,15 @@ import com.Assessment.SocialMedia.entities.TweedleUser;
 
 @Mapper(componentModel = "spring",uses= TweetMapper.class)
 public interface TweedleUserMapper {
-
+	
 	TweedleUser DTOtoEntity(TweedleUserDTO tweedleUserDTO);
-
+	
 	List<TweedleUserResponseDTO> entitiesToResponseDTOs(List<TweedleUser> tUsers);
-
+	
 	TweedleUserResponseDTO entityToResponseDTO(TweedleUser tweedleUser);
-
+	
 	TweedleUser requestDTOtoEntity(TweedleUserRequestDTO tweedleUserRequestDTO);
 
 	TweedleUser postTweetRequesttoEntity(PostTweetDTO postTweetDTO);
+
 }
