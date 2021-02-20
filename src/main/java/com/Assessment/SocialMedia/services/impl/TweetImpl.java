@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.Assessment.SocialMedia.DTOs.HashTagResponseDTO;
 import com.Assessment.SocialMedia.DTOs.PostTweetDTO;
+import com.Assessment.SocialMedia.DTOs.TweedleUserDTO;
 import com.Assessment.SocialMedia.DTOs.TweedleUserRequestDTO;
 import com.Assessment.SocialMedia.DTOs.TweedleUserResponseDTO;
 import com.Assessment.SocialMedia.DTOs.TweetResponseDTO;
@@ -193,7 +194,7 @@ public class TweetImpl implements TweetService {
 	@Override
 	public TweetResponseDTO postTweet(PostTweetDTO postTweetDTO) {
 		Optional<TweedleUser> findUser = tUserRepo
-				.findByCredentialsUserNameIgnoreCase(postTweetDTO.getCredentials().getUserName());
+		.findByCredentialsUserNameIgnoreCase(postTweetDTO.getCredentials().getUserName());
 
 		if (findUser.isEmpty()) {
 			throw new NotFoundException("User could not be found.");
@@ -268,4 +269,35 @@ public class TweetImpl implements TweetService {
 		tweetRepository.saveAndFlush(newTweet);
 		return tweetMapper.entityToResponseDTO(newTweet);
 	}
+
+	@Override
+	public List<TweetResponseDTO> getRepliesForTweet(Long id) {
+		Optional<Tweet> findTweet = tweetRepository.findById(id);
+		if (findTweet.isEmpty() || findTweet.get().isDeleted()) {
+			throw new NotFoundException("No such tweet exists or has been deleted.");
+		}
+		List<Tweet> repliesToTweet = tweetRepository.repliesToTweet(id);
+		
+		 return tweetMapper.entitiesToResponseDTOs(repliesToTweet);
+				
+	}
+
+	@Override
+	public List<TweetResponseDTO> getDirectRepostsOfTweet(Long id) {
+		Optional<Tweet> findTweetR = tweetRepository.findById(id);
+		if (findTweetR.isEmpty() || findTweetR.get().isDeleted()) {
+			throw new NotFoundException("No such tweet exists or has been deleted.");
+		}
+		List<Tweet> repostToTweet = tweetRepository.repostsToTweet(id);
+		
+		 return tweetMapper.entitiesToResponseDTOs(repostToTweet);
+			
+	}
+	
+//	Retrieves the direct reposts of the tweet with the given id. 
+//	If that tweet is deleted or otherwise doesn't exist, 
+//	an error should be sent in lieu of a response.
+//
+//	IMPORTANT: Deleted reposts of the tweet should be excluded from the response.
+	
 }

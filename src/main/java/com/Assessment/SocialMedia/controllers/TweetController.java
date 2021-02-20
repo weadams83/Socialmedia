@@ -34,23 +34,24 @@ public class TweetController {
 	public List<TweetResponseDTO> getAllTweets() {
 		return tweetService.getAllTweets();
 	}
-	
+
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.OK)
-	public TweetResponseDTO deleteTweet(@PathVariable("id") Long id, @RequestBody TweedleUserRequestDTO tweetUserRequestDTO) {
+	public TweetResponseDTO deleteTweet(@PathVariable("id") Long id,
+			@RequestBody TweedleUserRequestDTO tweetUserRequestDTO) {
 		return tweetService.deleteTweet(id, tweetUserRequestDTO);
 	}
-	
+
 	@PostMapping("/{id}/like")
 	@ResponseStatus(HttpStatus.CREATED)
 	public void postLike(@PathVariable("id") Long id, @RequestBody TweedleUserRequestDTO tweedleUserRequestDTO) {
-		tweetService.postLike(id,tweedleUserRequestDTO);
+		tweetService.postLike(id, tweedleUserRequestDTO);
 	}
-	
+
 	@PostMapping("/{id}/reply")
 	@ResponseStatus(HttpStatus.CREATED)
 	public TweetResponseDTO postReply(@PathVariable("id") Long id, @RequestBody PostTweetDTO postTweetDTO) {
-		return tweetService.postReply(id,postTweetDTO);
+		return tweetService.postReply(id, postTweetDTO);
 	}
 
 	@GetMapping("/{id}")
@@ -60,27 +61,35 @@ public class TweetController {
 	}
 
 	@PostMapping
+	@ResponseStatus(HttpStatus.OK)
 	public TweetResponseDTO postTweet(@RequestBody PostTweetDTO postTweetDTO) {
 		return tweetService.postTweet(postTweetDTO);
 	}
 
 	@GetMapping("/{id}/likes")
+	@ResponseStatus(HttpStatus.OK)
 	public List<TweedleUserResponseDTO> getUsersLikedTweet(@PathVariable Long id) {
 		return tweetService.getUsersLikedTweet(id);
 	}
+
 	@GetMapping("/{id}/tags")
 	@ResponseStatus(HttpStatus.OK)
-	public List<HashTagResponseDTO> getUsersTweetTags(@PathVariable("id") Long id) {
+	public List<HashTagResponseDTO> getUsersTweetTags(@PathVariable Long id) {
 		return tweetService.getUsersTweetTags(id);
 	}
-	
-	@GetMapping("/{id}/context")
-	public ContextDTO getTweetContext() {
-		if (tweetExists) {
-			
-		} else {
-			throw new TweetDoesntExistException
-		}
+
+	@GetMapping("/{id}/replies")
+	@ResponseStatus(HttpStatus.OK)
+	public List<TweetResponseDTO> getRepliesForTweet(@PathVariable Long id) {
+		return tweetService.getRepliesForTweet(id);
 	}
+
+	@GetMapping("/{id}/repost")
+	@ResponseStatus(HttpStatus.OK)
+	public List<TweetResponseDTO> getDirectRepostsOfTweet(@PathVariable Long id) {
+		return tweetService.getDirectRepostsOfTweet(id);
+	}
+
+//tashed changes
 
 }

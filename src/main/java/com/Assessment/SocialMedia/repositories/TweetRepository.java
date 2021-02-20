@@ -37,4 +37,10 @@ public interface TweetRepository extends JpaRepository<Tweet, Long> {
 			+ "	And t.deleted = false Order by t.posted DESC", nativeQuery = true)
 	List<Tweet> getTweetsTagged(@Param("hTag") String hTag);
 
+	@Query(value = "Select * from tweet t where t.in_reply_to_id = :tweet_id And t.deleted = false", nativeQuery = true)
+	List<Tweet> repliesToTweet(@Param("tweet_id") Long tweet_id);
+
+	@Query(value = "Select * from tweet t where t.repost_of_id = :tweet_id And t.deleted = false", nativeQuery = true)
+	List<Tweet> repostsToTweet(@Param("tweet_id") Long tweet_id);
+
 }

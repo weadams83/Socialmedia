@@ -8,6 +8,7 @@ import com.Assessment.SocialMedia.DTOs.TweedleUserRequestDTO;
 import com.Assessment.SocialMedia.DTOs.TweedleUserResponseDTO;
 import com.Assessment.SocialMedia.DTOs.TweetResponseDTO;
 
+
 public interface TweetService {
 
 	List<TweetResponseDTO> getAllTweets();
@@ -25,5 +26,13 @@ public interface TweetService {
 	List<HashTagResponseDTO> getUsersTweetTags(Long id);
 
 	TweetResponseDTO postReply(Long id, PostTweetDTO postTweetDTO);
+
+	
+//
+	List<TweetResponseDTO> getRepliesForTweet(Long id);
+
+	List<TweetResponseDTO> getDirectRepostsOfTweet(Long id);
+	
+
 
 }
