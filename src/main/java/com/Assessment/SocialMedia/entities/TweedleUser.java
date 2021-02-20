@@ -4,7 +4,6 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Objects;
 
-import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,7 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
@@ -35,7 +33,7 @@ public class TweedleUser {
 	private Long id;															//id
 	private final Timestamp joined = new Timestamp(System.currentTimeMillis()); //joined date/time
 	private boolean deleted;													//deleted
-
+	
 	@OneToMany(mappedBy = "author")
 	private List<Tweet> tweets;													//tweets
 		

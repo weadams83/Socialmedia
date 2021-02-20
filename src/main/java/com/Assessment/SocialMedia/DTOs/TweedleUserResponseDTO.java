@@ -8,6 +8,7 @@ import com.Assessment.SocialMedia.entities.UserCredentials;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Data

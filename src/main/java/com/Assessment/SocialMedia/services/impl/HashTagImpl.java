@@ -31,6 +31,12 @@ public class HashTagImpl implements HashTagService {
 	public List<HashTagResponseDTO> getAllHashTags() {
 		return hTagMapper.entitiesToResponseDTOs(hashTagRepository.findAll());
 	}
+	
+	@Override
+	public boolean tagExists(String label) {
+		Optional<HashTag> hashTag = hashTagRepository.findByLabel(label);
+		return hashTag.isPresent();
+	}
 
 	@Override
 	public List<TweetResponseDTO> getAllTweetsWithHashTag(String label) {

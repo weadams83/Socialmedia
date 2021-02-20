@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 public class UserCredentials {
 	@Column(nullable=false, unique=true)
-	private String userName="";
+	private String userName;
 	
 	@Column(nullable = false)
 	private String password;

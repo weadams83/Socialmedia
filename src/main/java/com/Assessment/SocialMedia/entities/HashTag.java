@@ -11,14 +11,12 @@ import javax.persistence.ManyToMany;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @NoArgsConstructor
-@Getter
-@Setter
+@Data
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class HashTag {
 	@Id
@@ -26,11 +24,11 @@ public class HashTag {
 	private Long id;
 	
 	@Column(nullable=false,unique=true)
-	private String label="";
+	private String label;
 	
 	private final Timestamp firstUsed = new Timestamp(System.currentTimeMillis());
 	
-	private Timestamp lastUsed;	
+	private Timestamp lastUsed;
 	
 	@ManyToMany(mappedBy="hashtags")
 	private List<Tweet> tweets;

@@ -24,7 +24,7 @@ import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
-public class TweedleUserServiceImpl implements TweedleUserService{
+public class TweedleUserServiceImpl implements TweedleUserService {
 	private TweedleUserRepository tUserRepo;
 	private TweetRepository tweetRepo;
 	private TweedleUserMapper tUserMap;
@@ -132,9 +132,10 @@ public class TweedleUserServiceImpl implements TweedleUserService{
 		if(findUser.isEmpty()) {
 			throw new NotFoundException(String.format("User with username: %s could not be found.", userName));
 		}
-
-		if(!findUser.get().getCredentials().getUserName().equals(tUserRequestDTO.getCredentials().getUserName()) || 
-				!findUser.get().getCredentials().getPassword().equals(tUserRequestDTO.getCredentials().getPassword())){
+		/*
+		 * Compare passwords and if true, delete user
+		 */
+		if(!findUser.get().getCredentials().getPassword().equals(tUserRequestDTO.getCredentials().getPassword())){
 			throw new BadRequestException("User credentials do not match.");
 		}
 		findUser.get().setDeleted(true);
@@ -238,6 +239,12 @@ public class TweedleUserServiceImpl implements TweedleUserService{
 		}
 		List<TweedleUser> whoIFollow = tUserRepo.getWhoIFollow(findUser.get().getId());
 		return tUserMap.entitiesToResponseDTOs(whoIFollow);
+	}
+	
+	@Override
+	public boolean userExists(String username) {
+		Optional<TweedleUser> user = tUserRepo.findByCredentialsUserNameIgnoreCase(username);
+		return user.isPresent();
 	}
 	
 }

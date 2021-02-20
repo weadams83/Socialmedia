@@ -33,4 +33,6 @@ public interface TweedleUserService {
 
 	List<TweedleUserResponseDTO> getUserFollowing(String userName);
 
+	boolean userExists(String username);
+
 }

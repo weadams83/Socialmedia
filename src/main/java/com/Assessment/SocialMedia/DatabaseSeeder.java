@@ -30,7 +30,6 @@ public class DatabaseSeeder  implements CommandLineRunner{
 	public void run(String... args) throws Exception {
 //		Uncomment to seed database, don't forget to modify application.properties (create-drop or update)
 //----------------------------------------------------------------------------------------------------------------//
-
 		TweedleUser arwen = new TweedleUser();
 		Profile profile = new Profile();
 		profile.setEmail("arwen@gmail.com");
