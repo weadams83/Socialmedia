@@ -33,12 +33,6 @@ public class HashTagImpl implements HashTagService {
 	}
 	
 	@Override
-	public boolean tagExists(String label) {
-		Optional<HashTag> hashTag = hashTagRepository.findByLabel(label);
-		return hashTag.isPresent();
-	}
-
-	@Override
 	public List<TweetResponseDTO> getAllTweetsWithHashTag(String label) {
 		Optional<HashTag> findTag = hashTagRepository.findByLabelIgnoreCase(label);
 		if(findTag.isEmpty()) {
@@ -48,7 +42,10 @@ public class HashTagImpl implements HashTagService {
 		return tweetMap.entitiesToResponseDTOs(findTweets);
 	}
 	
-	
-
+	@Override
+	public boolean tagExists(String label) {
+		Optional<HashTag> hashTag = hashTagRepository.findByLabelIgnoreCase(label);
+		return hashTag.isPresent();
+	}	
 
 }
