@@ -17,6 +17,7 @@ import com.Assessment.SocialMedia.DTOs.PostTweetDTO;
 import com.Assessment.SocialMedia.DTOs.TweedleUserRequestDTO;
 import com.Assessment.SocialMedia.DTOs.TweedleUserResponseDTO;
 import com.Assessment.SocialMedia.DTOs.TweetResponseDTO;
+import com.Assessment.SocialMedia.entities.Tweet;
 import com.Assessment.SocialMedia.services.TweetService;
 
 import lombok.AllArgsConstructor;
@@ -73,6 +74,13 @@ public class TweetController {
 		return tweetService.getUsersTweetTags(id);
 	}
 	
-
+	@GetMapping("/{id}/context")
+	public ContextDTO getTweetContext() {
+		if (tweetExists) {
+			
+		} else {
+			throw new TweetDoesntExistException
+		}
+	}
 
 }

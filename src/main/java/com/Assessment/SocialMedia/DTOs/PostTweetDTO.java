@@ -1,7 +1,5 @@
 package com.Assessment.SocialMedia.DTOs;
 
-import java.util.List;
-
 import com.Assessment.SocialMedia.entities.UserCredentials;
 
 import lombok.Data;
