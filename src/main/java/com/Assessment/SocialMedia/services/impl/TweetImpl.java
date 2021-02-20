@@ -45,7 +45,7 @@ public class TweetImpl implements TweetService {
 		Pattern pattern = Pattern.compile("#\\S+");
 		Matcher matcher = pattern.matcher(content);
 		while (matcher.find()) {
-			retList.add(matcher.group());
+			retList.add(matcher.group().substring(1));
 		}
 		return retList;
 	}
@@ -56,7 +56,7 @@ public class TweetImpl implements TweetService {
 		Pattern pattern = Pattern.compile("@\\S+");
 		Matcher matcher = pattern.matcher(content);
 		while (matcher.find()) {
-			retList.add(matcher.group());
+			retList.add(matcher.group().substring(1));
 		}
 		return retList;
 	}
@@ -65,6 +65,8 @@ public class TweetImpl implements TweetService {
 		List<String> hTags = findHashTagContent(tweet.getContent());
 		Optional<HashTag> findTag = Optional.of(new HashTag());
 		List<Tweet> tempTweetList = new ArrayList<Tweet>();
+		List<HashTag> tweetHashT = new ArrayList<>();
+		tweetRepository.saveAndFlush(tweet);
 		for (String eachTag : hTags) {
 			findTag = hTagRepo.findByLabelIgnoreCase(eachTag);
 			if (findTag.isEmpty()) {
@@ -73,6 +75,7 @@ public class TweetImpl implements TweetService {
 				tempTweetList.add(tweet);
 				newTag.setLabel(eachTag);
 				newTag.setLastUsed(new Timestamp(System.currentTimeMillis()));
+				tweetHashT.add(newTag);
 				newTag.setTweets(tempTweetList);
 				hTagRepo.save(newTag);
 			} else {
@@ -80,9 +83,12 @@ public class TweetImpl implements TweetService {
 				tempTweetList.add(tweet);
 				findTag.get().setLastUsed(new Timestamp(System.currentTimeMillis()));
 				findTag.get().setTweets(tempTweetList);
+				tweetHashT.add(findTag.get());
 				hTagRepo.save(findTag.get());
 			}
 		}
+		tweet.setHashtags(tweetHashT);
+		tweetRepository.saveAndFlush(tweet);
 	}
 
 	public void findSetMentions(Tweet tweet) {
