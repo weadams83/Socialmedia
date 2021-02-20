@@ -79,7 +79,7 @@ public class DatabaseSeeder  implements CommandLineRunner{
 		tweet.setMentions(findMentioned);
 		tweet = tweetRepo.saveAndFlush(tweet);
 		tweet.setHashtags(arwensHashTags);
-		
+
 		arwensTweets.add(tweet);
 		hashTag.setTweets(arwensTweets);
 		hashTag2.setTweets(arwensTweets);
