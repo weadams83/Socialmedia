@@ -9,6 +9,7 @@ import com.Assessment.SocialMedia.DTOs.HashTagResponseDTO;
 import com.Assessment.SocialMedia.DTOs.TweetResponseDTO;
 import com.Assessment.SocialMedia.entities.HashTag;
 import com.Assessment.SocialMedia.entities.Tweet;
+import com.Assessment.SocialMedia.exceptions.BadRequestException;
 import com.Assessment.SocialMedia.exceptions.NotFoundException;
 import com.Assessment.SocialMedia.mappers.HashTagMapper;
 import com.Assessment.SocialMedia.mappers.TweetMapper;
@@ -40,6 +41,8 @@ public class HashTagImpl implements HashTagService {
 		List<Tweet> findTweets = tweetRepo.getTweetsTagged(label);
 		return tweetMap.entitiesToResponseDTOs(findTweets);
 	}
+	
+	
 
 
 }

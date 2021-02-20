@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.Assessment.SocialMedia.DTOs.HashTagResponseDTO;
 import com.Assessment.SocialMedia.DTOs.PostTweetDTO;
 import com.Assessment.SocialMedia.DTOs.TweedleUserRequestDTO;
 import com.Assessment.SocialMedia.DTOs.TweedleUserResponseDTO;
@@ -65,5 +67,12 @@ public class TweetController {
 	public List<TweedleUserResponseDTO> getUsersLikedTweet(@PathVariable Long id) {
 		return tweetService.getUsersLikedTweet(id);
 	}
+	@GetMapping("/{id}/tags")
+	@ResponseStatus(HttpStatus.OK)
+	public List<HashTagResponseDTO> getUsersTweetTags(@PathVariable("id") Long id) {
+		return tweetService.getUsersTweetTags(id);
+	}
+	
+
 
 }

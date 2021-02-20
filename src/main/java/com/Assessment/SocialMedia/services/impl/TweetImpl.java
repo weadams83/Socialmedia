@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 
 import org.springframework.stereotype.Service;
 
+import com.Assessment.SocialMedia.DTOs.HashTagResponseDTO;
 import com.Assessment.SocialMedia.DTOs.PostTweetDTO;
 import com.Assessment.SocialMedia.DTOs.TweedleUserRequestDTO;
 import com.Assessment.SocialMedia.DTOs.TweedleUserResponseDTO;
@@ -18,6 +19,7 @@ import com.Assessment.SocialMedia.entities.TweedleUser;
 import com.Assessment.SocialMedia.entities.Tweet;
 import com.Assessment.SocialMedia.exceptions.BadRequestException;
 import com.Assessment.SocialMedia.exceptions.NotFoundException;
+import com.Assessment.SocialMedia.mappers.HashTagMapper;
 import com.Assessment.SocialMedia.mappers.TweedleUserMapper;
 import com.Assessment.SocialMedia.mappers.TweetMapper;
 import com.Assessment.SocialMedia.repositories.HashTagRepository;
@@ -34,6 +36,7 @@ public class TweetImpl implements TweetService {
 	private TweedleUserMapper tUserMap;
 	private TweetRepository tweetRepository;
 	private TweetMapper tweetMapper;
+	private HashTagMapper hTagMapper;
 	private HashTagRepository hTagRepo;
 
 	// utility function find hashtags
@@ -96,6 +99,7 @@ public class TweetImpl implements TweetService {
 		tweetRepository.saveAndFlush(tweet);
 	}
 
+
 	@Override
 	public List<TweetResponseDTO> getAllTweets() {
 
@@ -115,6 +119,7 @@ public class TweetImpl implements TweetService {
 		}
 		return tweetMapper.entityToResponseDTO(findId.get());
 	}
+	
 
 	@Override
 	public TweetResponseDTO deleteTweet(Long id, TweedleUserRequestDTO tweetUserRequestDTO) {
@@ -162,6 +167,21 @@ public class TweetImpl implements TweetService {
 			findUser.get().setLikedTweets(likedTweets);
 			tUserRepo.saveAndFlush(findUser.get());
 		}
+	}
+	
+	@Override
+	public List<HashTagResponseDTO> getUsersTweetTags(Long id) {
+		Optional<Tweet>findTweet = tweetRepository.findById(id);
+		if (findTweet.isEmpty()) {
+			throw new NotFoundException(String.format("Tweet With id: %d does not exsist", id));
+		}
+		if (findTweet.get().isDeleted()) {
+			throw new BadRequestException("Tweet was deleted");
+		}
+		List<HashTag> hashTags=findTweet.get().getHashtags();
+		return hTagMapper.entitiesToResponseDTOs(hashTags);
+		
+		
 	}
 
 	@Override
