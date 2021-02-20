@@ -3,6 +3,7 @@ package com.Assessment.SocialMedia.mappers;
 import java.util.List;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import com.Assessment.SocialMedia.DTOs.PostTweetDTO;
 import com.Assessment.SocialMedia.DTOs.TweedleUserDTO;
