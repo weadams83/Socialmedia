@@ -2,9 +2,9 @@ package com.Assessment.SocialMedia.services;
 
 import java.util.List;
 
+import com.Assessment.SocialMedia.DTOs.ContextDTO;
 import com.Assessment.SocialMedia.DTOs.HashTagResponseDTO;
 import com.Assessment.SocialMedia.DTOs.PostTweetDTO;
-import com.Assessment.SocialMedia.DTOs.TweedleUserDTO;
 import com.Assessment.SocialMedia.DTOs.TweedleUserMentionDTO;
 import com.Assessment.SocialMedia.DTOs.TweedleUserRequestDTO;
 import com.Assessment.SocialMedia.DTOs.TweedleUserResponseDTO;
@@ -34,5 +34,7 @@ public interface TweetService {
 	List<TweetResponseDTO> getDirectRepostsOfTweet(Long id);
 	
 	List<TweedleUserMentionDTO> getMentionedUsers(Long id);
+	
+	ContextDTO getTweetContext(Long id);
 
 }

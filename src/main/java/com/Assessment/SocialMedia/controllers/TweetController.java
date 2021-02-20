@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.Assessment.SocialMedia.DTOs.ContextDTO;
 import com.Assessment.SocialMedia.DTOs.HashTagResponseDTO;
 import com.Assessment.SocialMedia.DTOs.PostTweetDTO;
 import com.Assessment.SocialMedia.DTOs.TweedleUserMentionDTO;
@@ -95,7 +96,10 @@ public class TweetController {
 	public List<TweetResponseDTO> getDirectRepostsOfTweet(@PathVariable Long id) {
 		return tweetService.getDirectRepostsOfTweet(id);
 	}
-
-
-
+	
+	@GetMapping("/{id}/context")
+	@ResponseStatus(HttpStatus.OK)
+	public ContextDTO getTweetContext(@PathVariable("id") Long id) {
+		return tweetService.getTweetContext(id);
+	}
 }

@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 
 import org.springframework.stereotype.Service;
 
+import com.Assessment.SocialMedia.DTOs.ContextDTO;
 import com.Assessment.SocialMedia.DTOs.HashTagResponseDTO;
 import com.Assessment.SocialMedia.DTOs.PostTweetDTO;
 import com.Assessment.SocialMedia.DTOs.TweedleUserMentionDTO;
@@ -309,5 +310,28 @@ public class TweetImpl implements TweetService {
 			
 	}
 	
-
+//	Retrieves the direct reposts of the tweet with the given id. 
+//	If that tweet is deleted or otherwise doesn't exist, 
+//	an error should be sent in lieu of a response.
+//
+//	IMPORTANT: Deleted reposts of the tweet should be excluded from the response.
+	
+	public ContextDTO getTweetContext(Long id) {
+		ContextDTO context = new ContextDTO();
+		Optional<Tweet> findTweet = tweetRepository.findById(id);
+		if(findTweet.isEmpty()) {
+			throw new NotFoundException(String.format("Tweet with %d can't be found.", id));
+		}
+		context.setTarget(tweetMapper.entityToResponseDTO(findTweet.get()));
+		List<Tweet> findAfter = tweetRepository.getAfterContext(findTweet.get().getId());
+		findAfter.remove(0);
+		List<Tweet> findBefore = new ArrayList<>();
+		if(findTweet.get().getInReplyTo() != null) {
+			findBefore = tweetRepository.getBeforeContext(findTweet.get().getInReplyTo().getId());
+		}
+		findBefore.remove(findTweet.get());
+		context.setAfter(tweetMapper.entitiesToResponseDTOs(findAfter));
+		context.setBefore(tweetMapper.entitiesToResponseDTOs(findBefore));
+		return context;
+	}
 }

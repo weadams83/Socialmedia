@@ -20,8 +20,8 @@ public class TweetResponseDTO {
 	private Long id; 
 	private String Content; 
 	private Timestamp posted;
-	private TweetResponseDTO inReplyTo;
-	private TweetResponseDTO repostOf;
-	private List<TweedleUserResponseDTO> likedBy;
+//	private TweetResponseDTO inReplyTo;
+//	private TweetResponseDTO repostOf;
+//	private List<TweedleUserResponseDTO> likedBy;
 	
 }

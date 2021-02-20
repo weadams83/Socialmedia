@@ -42,5 +42,23 @@ public interface TweetRepository extends JpaRepository<Tweet, Long> {
 
 	@Query(value = "Select * from tweet t where t.repost_of_id = :tweet_id And t.deleted = false", nativeQuery = true)
 	List<Tweet> repostsToTweet(@Param("tweet_id") Long tweet_id);
+	
+	@Query(value = "with recursive find_tree as ("
+		+ "			   	select t.id,t.content,t.deleted,t.posted,t.author_id,t.in_reply_to_id,t.repost_of_id from tweet as t"
+		+ "			   	where t.id = :tweet_id AND t.deleted=false union all select child.id, child.content,child.deleted,"
+		+ "				child.posted,child.author_id,child.in_reply_to_id,child.repost_of_id from tweet as child"
+		+ "			   	join find_tree as parent on parent.id = child.in_reply_to_id)"
+		+ "				select * from find_tree order by find_tree.posted asc;", nativeQuery = true)
+	List<Tweet> getAfterContext(@Param("tweet_id") Long tweet_id);
+	
+	@Query(value = "with recursive find_tree as ("
+			+ "   select t.id,t.content,t.deleted,t.posted,t.author_id,t.in_reply_to_id,t.repost_of_id"
+			+ "   from tweet as t"
+			+ "   where t.id = :tweet_id AND t.deleted=false"
+			+ "    union all"
+			+ "   select parent.id, parent.content,parent.deleted,parent.posted,parent.author_id,parent.in_reply_to_id,parent.repost_of_id from tweet as parent"
+			+ "   join find_tree as child on child.in_reply_to_id = parent.id) select * from find_tree order by find_tree.posted asc;", nativeQuery = true)
+	List<Tweet> getBeforeContext(@Param("tweet_id") Long tweet_id);
+	
 
 }
