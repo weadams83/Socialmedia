@@ -21,5 +21,7 @@ public interface TweetMapper {
 	Tweet requestDTOtoEntity(Long id);
 			
 	Tweet tweetRequestDTOtoEntity(TweetRequestDTO tweetRequestDTO);
+	
+
 
 }

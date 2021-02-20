@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.Assessment.SocialMedia.DTOs.HashTagResponseDTO;
 import com.Assessment.SocialMedia.DTOs.PostTweetDTO;
+import com.Assessment.SocialMedia.DTOs.TweedleUserDTO;
+import com.Assessment.SocialMedia.DTOs.TweedleUserMentionDTO;
 import com.Assessment.SocialMedia.DTOs.TweedleUserRequestDTO;
 import com.Assessment.SocialMedia.DTOs.TweedleUserResponseDTO;
 import com.Assessment.SocialMedia.DTOs.TweetResponseDTO;
@@ -27,12 +29,10 @@ public interface TweetService {
 
 	TweetResponseDTO postReply(Long id, PostTweetDTO postTweetDTO);
 
-	
-//
 	List<TweetResponseDTO> getRepliesForTweet(Long id);
 
 	List<TweetResponseDTO> getDirectRepostsOfTweet(Long id);
 	
-
+	List<TweedleUserMentionDTO> getMentionedUsers(Long id);
 
 }

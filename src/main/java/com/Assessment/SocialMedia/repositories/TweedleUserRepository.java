@@ -29,5 +29,8 @@ public interface TweedleUserRepository extends JpaRepository<TweedleUser, Long> 
 			+ " tweedle_user_liked_tweets t Where t.liked_tweets_id = :tweet_id ) AND tu.deleted=false", nativeQuery = true)
 	List<TweedleUser> getAllLikes(@Param("tweet_id") Long tweet_id);
 	
-	
+	@Query(value = "Select * from tweedle_user tu where tu.id in"
+			+ " (Select m.mentioned From mentioned_users m Where m.mentions= :tweet_id) And tu.deleted = false", nativeQuery = true)
+	List<TweedleUser> getAllMentions(@Param("tweet_id") Long tweet_id);
+
 }

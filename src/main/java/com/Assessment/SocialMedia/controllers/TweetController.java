@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.Assessment.SocialMedia.DTOs.HashTagResponseDTO;
 import com.Assessment.SocialMedia.DTOs.PostTweetDTO;
+import com.Assessment.SocialMedia.DTOs.TweedleUserMentionDTO;
 import com.Assessment.SocialMedia.DTOs.TweedleUserRequestDTO;
 import com.Assessment.SocialMedia.DTOs.TweedleUserResponseDTO;
 import com.Assessment.SocialMedia.DTOs.TweetResponseDTO;
-import com.Assessment.SocialMedia.entities.Tweet;
 import com.Assessment.SocialMedia.services.TweetService;
 
 import lombok.AllArgsConstructor;
@@ -78,6 +78,12 @@ public class TweetController {
 		return tweetService.getUsersTweetTags(id);
 	}
 
+	@GetMapping("/{id}/mentions")
+	@ResponseStatus(HttpStatus.OK)
+	public List<TweedleUserMentionDTO> getMentionedUsers(@PathVariable("id")Long id){
+		return tweetService.getMentionedUsers(id);
+	}
+
 	@GetMapping("/{id}/replies")
 	@ResponseStatus(HttpStatus.OK)
 	public List<TweetResponseDTO> getRepliesForTweet(@PathVariable Long id) {
@@ -90,6 +96,6 @@ public class TweetController {
 		return tweetService.getDirectRepostsOfTweet(id);
 	}
 
-//tashed changes
+
 
 }

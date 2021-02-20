@@ -7,6 +7,7 @@ import org.mapstruct.Mapping;
 
 import com.Assessment.SocialMedia.DTOs.PostTweetDTO;
 import com.Assessment.SocialMedia.DTOs.TweedleUserDTO;
+import com.Assessment.SocialMedia.DTOs.TweedleUserMentionDTO;
 import com.Assessment.SocialMedia.DTOs.TweedleUserRequestDTO;
 import com.Assessment.SocialMedia.DTOs.TweedleUserResponseDTO;
 import com.Assessment.SocialMedia.entities.TweedleUser;
@@ -23,5 +24,9 @@ public interface TweedleUserMapper {
 	TweedleUser requestDTOtoEntity(TweedleUserRequestDTO tweedleUserRequestDTO);
 
 	TweedleUser postTweetRequesttoEntity(PostTweetDTO postTweetDTO);
+	
+	List<TweedleUserMentionDTO> entitiesToMentionDTO(List<TweedleUser> tMentioned); 
+	
+
 
 }

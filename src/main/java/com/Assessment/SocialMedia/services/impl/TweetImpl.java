@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.Assessment.SocialMedia.DTOs.HashTagResponseDTO;
 import com.Assessment.SocialMedia.DTOs.PostTweetDTO;
-import com.Assessment.SocialMedia.DTOs.TweedleUserDTO;
+import com.Assessment.SocialMedia.DTOs.TweedleUserMentionDTO;
 import com.Assessment.SocialMedia.DTOs.TweedleUserRequestDTO;
 import com.Assessment.SocialMedia.DTOs.TweedleUserResponseDTO;
 import com.Assessment.SocialMedia.DTOs.TweetResponseDTO;
@@ -39,6 +39,7 @@ public class TweetImpl implements TweetService {
 	private TweetMapper tweetMapper;
 	private HashTagMapper hTagMapper;
 	private HashTagRepository hTagRepo;
+	private TweedleUserMapper tMentioned;
 
 	// utility function find hashtags
 	public List<String> findHashTagContent(String content) {
@@ -187,7 +188,21 @@ public class TweetImpl implements TweetService {
 		}
 		List<HashTag> hashTags=findTweet.get().getHashtags();
 		return hTagMapper.entitiesToResponseDTOs(hashTags);
+	}
+	
+	@Override
+	public List<TweedleUserMentionDTO> getMentionedUsers(Long id){
+		Optional<Tweet>findTweet = tweetRepository.findById(id);
+		if (findTweet.isEmpty()) {
+			throw new NotFoundException(String.format("Tweet With id: %d does not exsist", id));
+		}
+		if (findTweet.get().isDeleted()) {
+			throw new BadRequestException("Tweet was deleted");
+		}
 		
+		List<TweedleUser> findMentions=tUserRepo.getAllMentions(id);
+		return tMentioned.entitiesToMentionDTO(findMentions);
+	
 		
 	}
 
@@ -294,10 +309,5 @@ public class TweetImpl implements TweetService {
 			
 	}
 	
-//	Retrieves the direct reposts of the tweet with the given id. 
-//	If that tweet is deleted or otherwise doesn't exist, 
-//	an error should be sent in lieu of a response.
-//
-//	IMPORTANT: Deleted reposts of the tweet should be excluded from the response.
-	
+
 }
